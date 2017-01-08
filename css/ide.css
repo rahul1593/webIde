@@ -1,0 +1,60 @@
+/*
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+*/
+/* 
+    Created on : 7 Jan, 2017, 1:44:59 PM
+    Author     : Rahul Bhartari
+*/
+
+.ideFont{
+    font-family: Verdana, Arial, Helvetica, sans-serif;
+}
+
+.sfTextStyle{
+    text-align: left;
+    font-family: Verdana, Arial, Helvetica, sans-serif;
+    color: black;
+    font-size: 10pt;
+}
+
+.sfH1TextStyle{
+    text-align: left;
+    font-family: Verdana, Arial, Helvetica, sans-serif;
+    font-size: 12pt;
+}
+
+#menuBar{
+    position: absolute;
+    left: 0%;
+    width: 99.8%;
+    top: 0%;
+    min-height: 15pt;
+    max-height: 27pt;
+    border: none;
+    margin: 0;
+    background-color: #cccccc;
+}
+
+#workArea{
+    position: absolute;
+    left: 0.1%;
+    width: 99.7%;
+    top: 5.4%;
+    height: 90.2%;
+}
+
+#footer{
+    position: absolute;
+    left: 0%;
+    top: 95.8%;
+    height: 4.1%;
+    min-height:25px;
+    width: 100%;
+    min-height: 16pt;
+    max-height: 21pt;
+    border: none;
+    margin: 0;
+    background-color: #aaaaaa;
+}
