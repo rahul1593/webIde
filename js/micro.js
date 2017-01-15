@@ -1,9 +1,6 @@
-/* 
+/*
  * Author: Rahul Bhartari
- * 
- * 
  */
-
 u$ = {
     App:{
        Name:null,
@@ -347,53 +344,153 @@ u$ = {
                         u$.System.Library.Action.__verticalDragAction(e, bar, topObjList, bottomObjList);
                     };
                     document.body.addEventListener('mousemove', u$.System.Library.Action.__data.dragHandle, false);
+                },
+                __menuItemHover: function(e, contextMenu){
+                    if(u$.System.Library.Gui.__data.itemClicked){
+                        u$.System.Library.Gui.__data.closeAllContextWindows(e);
+                        u$.System.Library.Gui.__data.itemClicked = true;
+                        contextMenu.setDisplay(true);
+                    }
+                },
+                __menuOptionHover: function(e, contextMenu){
+                    u$.System.Library.Gui.__data.closeOptionAllContextWindows(e);
+                    if(contextMenu !== null){
+                        contextMenu.setDisplay(true);
+                    }
                 }
             },
             Gui:{
                 Classes:{
                     general:'$menuBarBackground: #444444;\n',
                     window: '.uc_window{border-radius:2px}',
-                    menuBarItem: '.uc_menuBarItem{font-size:8pt;background-color:#cccccc;padding-left:2px;padding-right:2px;cursor:context-menu}\n\
+                    menuBarItem: '.uc_menuBarItem{font-size:10px;background-color:#cccccc;padding-left:2px;padding-right:2px;cursor:context-menu}\n\
                                     .uc_menuBarItem:hover,.uc_menuBarItem:active\n\
                                     {background-color:#eeeeee;border:1px solid #cccccc}',
-                    menuItemOption: '.uc_menuItemOption{}',
+                    menuItemOption: '.uc_menuItemOption{font-size:10px}\n\
+                                    .uc_menuItemOption:hover,.uc_menuItemOption:active{background-color:#cccccc;cursor:context-menu}',
                     icon: '.uc_icon{border:1px solid white}\n.uc_icon:hover,.uc_icon:active{border:1px solid black}',
                     hDragBar:'uc_hDragBar{}\n.uc_hDragBar:hover,.uc_hDragBar:active{cursor:row-resize}',
                     vDragBar:'uc_vDragBar{}\n.uc_vDragBar:hover,.uc_vDragBar:active{cursor:col-resize}'
                 },
                 __data:{
-                    menuItemList:[],
+                    itemClicked: false,
+                    menuItemList: [],
+                    contextWinOwnerOptionList: [],
                     getMenuItemByText: function(text){
                         return u$.System.Library.Utility.searchPropertyInObjList(u$.System.Library.Gui.__data.menuItemList, 'text', text);
+                    },
+                    closeAllContextWindows: function(e){
+                        var f=0,i;
+                        var menu = u$.System.Library.Gui.__data.menuItemList;
+                        var evt = window.event || e || event;
+                        var target = evt.target;
+                        for(i=0;i<menu.length;i++){
+                            if(menu[i].contextMenu !== null){
+                                if(target !== menu[i].obj){
+                                    if(!menu[i].contextMenu.obj.contains(target)){
+                                        menu[i].contextMenu.setDisplay(false);
+                                    }else{
+                                        f=2;
+                                    }
+                                }else{      //need a better solution ***** behaving differently in chrome & firefox
+                                    f=1;
+                                }
+                            }
+                        }
+                        if(f === 0){
+                            u$.System.Library.Gui.__data.itemClicked = false;
+                        }else if(f === 2){
+                            u$.System.Library.Gui.__data.itemClicked = true;
+                        }
+                    },
+                    closeOptionAllContextWindows: function(e){
+                        var opts = u$.System.Library.Gui.__data.contextWinOwnerOptionList;
+                        var evt = window.event || e || event;
+                        for(var i=0;i<opts.length;i++){
+                            if(!opts[i].contextMenu.obj.contains(evt.target)){  //---------------------------------to be improved
+                                opts[i].contextMenu.setDisplay(false);
+                            }else{
+                                var pCntx = opts[i].parentContext;
+                                while(pCntx.itemIsOption){
+                                    pCntx.setDisplay(true);
+                                    pCntx = pCntx.boundItemObj.parentContext;
+                                }pCntx.setDisplay(true);
+                            }
+                        }
                     }
                 },
                 Objects:{
                     icon: function(){
                         this.obj = null;
                         this.imageUrl = '';
-                        this.sideLength = 10;   //length in pixels
+                        this.sideLength = 15;   //length in pixels
                     },
                     menuItem: function(){
                         this.id = null;
                         this.obj = null;
                         this.text = null;
-                        this.onclick = null;
-                        this.iconEnabled = false;       //add space for icon
-                        this.contextMenuWinList = [];
-                    },
-                    menuItemOption: function(){
-                        this.id = null;
-                        this.obj = null;
-                        this.icon = null;
-                        this.onclick = null;
-                        this.contextMenuWinList = [];
+                        this.contextMenu = null;    //menuContextWindow object
+                        this.onclick = function(){
+                            if(this.contextMenu !== null){
+                                this.contextMenu.setDisplay(!this.contextMenu.displayStatus);
+                                u$.System.Library.Gui.__data.itemClicked = this.contextMenu.displayStatus;
+                            }
+                        };
                     },
                     menuContextWindow: function(){
                         this.id = null;
-                        this.obj = null;
-                        this.optionList = [];   //contains a list of options and context menues
-                        this.width = 100;       //width in pixels
+                        this.obj = null;        //this is a table
+                        this.boundItemObj = null;   //this is option or menu item
+                        this.itemIsOption = false;
+                        this.options = [];   //contains a list of menuItemOption objects
+                        this.width = 130;       //width in pixels
+                        this.displayStatus = false;
+                        this.setDisplay = function(status){ //true or false
+                            this.displayStatus = status;
+                            if(status){
+                                this.obj.style.display = 'inline-block';
+                                if(!this.itemIsOption){
+                                    this.boundItemObj.style.border = '1px solid black';
+                                }
+                                return true;
+                            }
+                            this.obj.style.display = 'none';
+                            if(!this.itemIsOption){
+                                this.boundItemObj.style.border = '1px solid #cccccc';
+                            }
+                        };
+                        this.setWidth = function(w){
+                            this.width = w;
+                            this.obj.style.width = w.toString()+'px';
+                        };
+                    },
+                    menuItemOption: function(){
+                        this.id = null;
+                        this.parentObj = null;      //this is container table
+                        this.obj = null;            //this is a table row
+                        this.iconObj = null;
+                        this.textObj = null;
+                        this.directorDivObj = null;
+                        var optionHeight = 12;     //height of the option
+                        this.onclick = null;
+                        this.contextMenu = null;
+                        this.parentContext = null;
+                        this.setHeight = function(height){
+                            optionHeight = height;
+                        };
+                        this.getHeight = function(){
+                            return optionHeight;
+                        }
                     }
+                },
+                closeAllContextWindows: function(){
+                    var i, menu = u$.System.Library.Gui.__data.menuItemList;
+                    for(i=0;i<menu.length;i++){
+                        if(menu[i].contextMenu !== null){
+                            menu[i].contextMenu.setDisplay(false);
+                        }
+                    }
+                    u$.System.Library.Gui.__data.itemClicked = false;
                 },
                 createWindow: function(parentWin, attributes){
                     var div = document.createElement('div');
@@ -489,41 +586,120 @@ u$ = {
                         menuItem.style = css;
                     }
                     menuItem.style.position = 'relative';
-                    menuItem.style.border = '1px transparent';
+                    menuItem.style.border = '1px solid #cccccc';
                     menuItem.className += ' uc_menuBarItem';
                     parentBar.obj.appendChild(menuItem);
                     var mb_item = new u$.System.Library.Gui.Objects.menuItem();
                     mb_item.obj = menuItem;
                     mb_item.text = text;
+                    menuItem.addEventListener('click', function(){mb_item.onclick();}, false);
                     u$.System.Library.Gui.__data.menuItemList[u$.System.Library.Gui.__data.menuItemList.length] = mb_item;
                     return mb_item;
                 },
-                addContextMenu: function(boundMenuItem){
-                    var cmdiv = document.createElement('div');
+                addContextMenuToItem: function(boundMenuItem){
+                    var cmtbl = document.createElement('table');
                     var contextMenu = new u$.System.Library.Gui.Objects.menuContextWindow();
                     var cst = window.getComputedStyle(boundMenuItem.obj);
-                    var left = boundMenuItem.obj.getBoundingClientRect().left+4;
-                    var bottom = parseInt(cst.height.split('px')[0], 10)+boundMenuItem.obj.getBoundingClientRect().top+2;
-                    cmdiv.style='position:absolute;top:'+bottom.toString()+'px;height:auto;left:'+left.toString()+'px;min-width:'+
-                                contextMenu.width.toString()+"px;border:1px solid black";
-                    u$.App.RootWindow.obj.appendChild(cmdiv);
-                    contextMenu.obj = cmdiv;
-                    boundMenuItem.contextMenuWinList[boundMenuItem.contextMenuWinList.length] = contextMenu;
+                    var left = boundMenuItem.obj.getBoundingClientRect().left;
+                    var bottom = parseInt(cst.height.split('px')[0], 10)+boundMenuItem.obj.getBoundingClientRect().top;
+                    cmtbl.style='position:absolute;top:'+bottom.toString()+'px;height:auto;left:'+left.toString()+'px;width:'+
+                                contextMenu.width.toString()+"px;border:1px solid black;margin:0;background-color:#eeeeee;display:none";
+                    cmtbl.style.borderCollapse = 'collapse';
+                    u$.App.RootWindow.obj.appendChild(cmtbl);
+                    contextMenu.obj = cmtbl;
+                    contextMenu.boundItemObj = boundMenuItem.obj;
+                    contextMenu.boundItemObj.addEventListener('mouseover', function(e){
+                        u$.System.Library.Action.__menuItemHover(e, contextMenu);
+                    }, false);
+                    boundMenuItem.contextMenu = contextMenu;
                     return contextMenu;
                 },
-                createMenuBarItemOption: function(parentItem, text, onClickHandle){
-                    var contextMenu;
-                    //add context menu if not present
-                    if(parentItem.contextMenuWinList.length === 0){
-                        contextMenu = u$.System.Library.Gui.addContextMenu(parentItem);
+                addContextMenuToOption: function(boundOption){
+                    if(boundOption.contextMenu !== null){
+                        return false;
                     }
-                    //else add item to context menu
-                    var item = new u$.System.Library.Gui.Objects.menuItemOption();
-                    var div = document.createElement('div');
-                    var btn = document.createElement('button');
+                    var pC = boundOption.parentContext;
+                    var cmtbl = document.createElement('table');
+                    var contextMenu = new u$.System.Library.Gui.Objects.menuContextWindow();
+                    pC.setDisplay(true);
+                    //get the dimentions
+                    var cst = window.getComputedStyle(pC.obj);
+                    var left = parseInt(cst.left.split('p')[0], 10)+parseInt(cst.width.split('p')[0], 10)-2;
+                    var top = parseInt(pC.obj.style.top.split('p')[0], 10);
+                    for(var i=0;i<pC.options.length;i++){
+                        top += pC.options[i].getHeight();
+                        if(pC.options[i] === boundOption || pC.options[i].obj === boundOption.obj){
+                            break;
+                        }
+                    }
+                    pC.setDisplay(false);
+                    cmtbl.style='position:absolute;top:'+top.toString()+'px;height:auto;left:'+left.toString()+'px;width:'+
+                                contextMenu.width.toString()+"px;border:1px solid black;margin:0;background-color:#eeeeee;display:none";
+                    cmtbl.style.borderCollapse = 'collapse';
+                    u$.App.RootWindow.obj.appendChild(cmtbl);
+                    contextMenu.obj = cmtbl;
+                    contextMenu.boundItemObj = boundOption.obj;
+                    contextMenu.itemIsOption = true;
+                    contextMenu.boundItemObj.addEventListener('mouseover', function(e){
+                        u$.System.Library.Action.__menuOptionHover(e, contextMenu);
+                    }, false);
+                    boundOption.contextMenu = contextMenu;
+                    boundOption.directorDivObj.innerHTML = '>'; //----------------------------to be changed
+                    boundOption.directorDivObj.style = 'text-align:right;font-size:7px';
+                    var ln = u$.System.Library.Gui.__data.contextWinOwnerOptionList.length;
+                    u$.System.Library.Gui.__data.contextWinOwnerOptionList[ln] = boundOption;
+                    return contextMenu;
+                },
+                createContextMenuOption: function(parentContext, text, onClickHandle){
+                    //add item to context menu
+                    var tmp, option = new u$.System.Library.Gui.Objects.menuItemOption();
+                    option.parentObj = parentContext.obj;
+                    var row = document.createElement('tr');
+                    option.obj = row;
+                    var h = option.getHeight();
+                    //create icon
+                    var td_temp = document.createElement('td');
+                    var icn = document.createElement('img');
+                    icn.style = 'height:100%;width:100%;margin:0;border:none;visibility:hidden';
+                    td_temp.style = 'width:15px;height:'+h+'px';
+                    td_temp.appendChild(icn);
+                    row.appendChild(td_temp);
+                    option.iconObj = icn;
+                    //create text
+                    td_temp = document.createElement('td');
+                    var txt = document.createElement('span');
+                    txt.innerHTML = text;
+                    tmp = parseInt(parentContext.obj.style.width.split('p')[0], 10);
+                    tmp = 'height:'+h+'px;width:'+(tmp-45).toString()+'px';
+                    td_temp.style = tmp;
+                    td_temp.appendChild(txt);
+                    row.appendChild(td_temp);
+                    option.textObj = txt;
+                    //create director
+                    td_temp = div = document.createElement('td');
+                    var director = document.createElement('div');
+                    td_temp.style = 'height:'+h+'px;width:30px;';
+                    director.style = 'height:100%;width:100%;margin:0;border:none';
+                    td_temp.appendChild(director);
+                    row.appendChild(td_temp);
+                    option.directorDivObj = director;
+                    //set rest of things
+                    row.addEventListener('click', onClickHandle, false);
+                    option.onclick = onClickHandle;
+                    row.className += 'uc_menuItemOption';
+                    option.parentObj.appendChild(row);
+                    row.addEventListener('mouseover', function(e){
+                        u$.System.Library.Action.__menuOptionHover(e, null);
+                    }, false);
+                    parentContext.options[parentContext.options.length] = option;
+                    option.parentContext = parentContext;
+                    return option;
                 },
                 addIconToMenuOption: function(){
                     
+                },
+                addOptionSeparator: function(context){
+                    context.options[context.options.length-1].obj.style.borderBottom = '1px solid black';
                 },
                 createSearchBox: function(parentObject, properties){
                     
@@ -581,6 +757,10 @@ u$ = {
            head.appendChild(style);
            //init events for different objects
            document.body.addEventListener('mouseup', u$.System.Library.Action.__dragEnd, false);
+           window.addEventListener('click', function(e){
+               u$.System.Library.Gui.__data.closeAllContextWindows(e);
+               u$.System.Library.Gui.__data.closeOptionAllContextWindows(e);
+           }, false);    //close all context menues on click
        }
     }
 };
