@@ -363,10 +363,10 @@ u$ = {
                 Classes:{
                     general:'$menuBarBackground: #444444;\n',
                     window: '.uc_window{border-radius:2px}',
-                    menuBarItem: '.uc_menuBarItem{font-size:10px;background-color:#cccccc;padding-left:2px;padding-right:2px;cursor:context-menu}\n\
+                    menuBarItem: '.uc_menuBarItem{font-size:10px;padding-left:2px;padding-right:2px;cursor:context-menu}\n\
                                     .uc_menuBarItem:hover,.uc_menuBarItem:active\n\
-                                    {background-color:#eeeeee;border:1px solid #cccccc}',
-                    menuItemOption: '.uc_menuItemOption{font-size:10px}\n\
+                                    {border:1px solid #cccccc}',
+                    menuItemOption: '.uc_menuItemOption{background-color:#eeeeee;font-size:10px}\n\
                                     .uc_menuItemOption:hover,.uc_menuItemOption:active{background-color:#cccccc;cursor:context-menu}',
                     icon: '.uc_icon{border:1px solid white}\n.uc_icon:hover,.uc_icon:active{border:1px solid black}',
                     hDragBar:'uc_hDragBar{}\n.uc_hDragBar:hover,.uc_hDragBar:active{cursor:row-resize}',
@@ -385,10 +385,13 @@ u$ = {
                         var evt = window.event || e || event;
                         var target = evt.target;
                         for(i=0;i<menu.length;i++){
+                            menu[i].obj.style.backgroundColor = '#eeeeee';
                             if(menu[i].contextMenu !== null){
                                 if(target !== menu[i].obj){
                                     if(!menu[i].contextMenu.obj.contains(target)){
                                         menu[i].contextMenu.setDisplay(false);
+                                        menu[i].obj.style.backgroundColor = '#cccccc';
+                                        menu[i].contextMenu.obj.style.backgroundColor = '#cccccc';
                                     }else{
                                         f=2;
                                     }
@@ -399,6 +402,7 @@ u$ = {
                         }
                         if(f === 0){
                             u$.System.Library.Gui.__data.itemClicked = false;
+                            
                         }else if(f === 2){
                             u$.System.Library.Gui.__data.itemClicked = true;
                         }
@@ -407,7 +411,7 @@ u$ = {
                         var opts = u$.System.Library.Gui.__data.contextWinOwnerOptionList;
                         var evt = window.event || e || event;
                         for(var i=0;i<opts.length;i++){
-                            if(!opts[i].contextMenu.obj.contains(evt.target)){  //---------------------------------to be improved
+                            if(!opts[i].contextMenu.obj.contains(evt.target)){
                                 opts[i].contextMenu.setDisplay(false);
                             }else{
                                 var pCntx = opts[i].parentContext;
@@ -415,25 +419,28 @@ u$ = {
                                     pCntx.setDisplay(true);
                                     pCntx = pCntx.boundItemObj.parentContext;
                                 }pCntx.setDisplay(true);
+                                pCntx.boundItemObj.style.backgroundColor = '#eeeeee';
+                                u$.System.Library.Gui.__data.itemClicked = true;
                             }
                         }
                     }
                 },
                 Objects:{
-                    icon: function(){
-                        this.obj = null;
-                        this.imageUrl = '';
-                        this.sideLength = 15;   //length in pixels
+                    icon: {
+                        path: '/img/fontello.svg',
+                        sideLength: 15   //length in pixels
                     },
                     menuItem: function(){
                         this.id = null;
                         this.obj = null;
                         this.text = null;
                         this.contextMenu = null;    //menuContextWindow object
+                        this.backgroundColor= '#cccccc';
                         this.onclick = function(){
                             if(this.contextMenu !== null){
                                 this.contextMenu.setDisplay(!this.contextMenu.displayStatus);
                                 u$.System.Library.Gui.__data.itemClicked = this.contextMenu.displayStatus;
+                                this.obj.style.backgroundColor = '#eeeeee';
                             }
                         };
                     },
@@ -445,6 +452,7 @@ u$ = {
                         this.options = [];   //contains a list of menuItemOption objects
                         this.width = 130;       //width in pixels
                         this.displayStatus = false;
+                        this.backgroundColor = '#eeeeee';
                         this.setDisplay = function(status){ //true or false
                             this.displayStatus = status;
                             if(status){
@@ -480,7 +488,10 @@ u$ = {
                         };
                         this.getHeight = function(){
                             return optionHeight;
-                        }
+                        };
+                        this.addIcon = function(svgIconName){
+                            this.iconObj.innerHTML = '<i class="'+svgIconName+'"></i>';
+                        };
                     }
                 },
                 closeAllContextWindows: function(){
@@ -585,11 +596,13 @@ u$ = {
                     if(css != null){
                         menuItem.style = css;
                     }
+                    
+                    var mb_item = new u$.System.Library.Gui.Objects.menuItem();
                     menuItem.style.position = 'relative';
                     menuItem.style.border = '1px solid #cccccc';
+                    menuItem.style.backgroundColor = mb_item.backgroundColor;
                     menuItem.className += ' uc_menuBarItem';
                     parentBar.obj.appendChild(menuItem);
-                    var mb_item = new u$.System.Library.Gui.Objects.menuItem();
                     mb_item.obj = menuItem;
                     mb_item.text = text;
                     menuItem.addEventListener('click', function(){mb_item.onclick();}, false);
@@ -644,13 +657,13 @@ u$ = {
                         u$.System.Library.Action.__menuOptionHover(e, contextMenu);
                     }, false);
                     boundOption.contextMenu = contextMenu;
-                    boundOption.directorDivObj.innerHTML = '>'; //----------------------------to be changed
-                    boundOption.directorDivObj.style = 'text-align:right;font-size:7px';
+                    boundOption.directorDivObj.innerHTML = '<i class="icon-right-dir"></i>';
+                    boundOption.directorDivObj.style = 'text-align:right';
                     var ln = u$.System.Library.Gui.__data.contextWinOwnerOptionList.length;
                     u$.System.Library.Gui.__data.contextWinOwnerOptionList[ln] = boundOption;
                     return contextMenu;
                 },
-                createContextMenuOption: function(parentContext, text, onClickHandle){
+                createContextMenuOption: function(parentContext, text, iconName, onClickHandle){
                     //add item to context menu
                     var tmp, option = new u$.System.Library.Gui.Objects.menuItemOption();
                     option.parentObj = parentContext.obj;
@@ -659,12 +672,13 @@ u$ = {
                     var h = option.getHeight();
                     //create icon
                     var td_temp = document.createElement('td');
-                    var icn = document.createElement('img');
-                    icn.style = 'height:100%;width:100%;margin:0;border:none;visibility:hidden';
+                    var icn = document.createElement('div');
+                    icn.style = 'height:100%;width:100%;margin:0;border:none;';
                     td_temp.style = 'width:15px;height:'+h+'px';
                     td_temp.appendChild(icn);
                     row.appendChild(td_temp);
                     option.iconObj = icn;
+                    option.addIcon(iconName);
                     //create text
                     td_temp = document.createElement('td');
                     var txt = document.createElement('span');
@@ -694,9 +708,6 @@ u$ = {
                     parentContext.options[parentContext.options.length] = option;
                     option.parentContext = parentContext;
                     return option;
-                },
-                addIconToMenuOption: function(){
-                    
                 },
                 addOptionSeparator: function(context){
                     context.options[context.options.length-1].obj.style.borderBottom = '1px solid black';
