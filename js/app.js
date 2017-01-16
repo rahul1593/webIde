@@ -88,79 +88,79 @@ function init_menuBar(){
     var help = u$.System.Library.Gui.createMenuBarItem(menuBarWin, 'Help', null);
     //add options to file: new, open, close, save, save as, save all, download, import project, export project, exit -----------------------------------
     var file_cm = u$.System.Library.Gui.addContextMenuToItem(file);
-    var file_scm1_new = u$.System.Library.Gui.createContextMenuOption(file_cm, 'New File', null);
-    var file_scm1_open = u$.System.Library.Gui.createContextMenuOption(file_cm, 'Open File', null);
-    var file_scm1_close = u$.System.Library.Gui.createContextMenuOption(file_cm, 'Close File', null);
+    var file_scm1_new = u$.System.Library.Gui.createContextMenuOption(file_cm, 'New File', 'icon-doc', null);
+    var file_scm1_open = u$.System.Library.Gui.createContextMenuOption(file_cm, 'Open File', 'icon-folder-open-1', null);
+    var file_scm1_close = u$.System.Library.Gui.createContextMenuOption(file_cm, 'Close File', 'icon-book-1', null);
     u$.System.Library.Gui.addOptionSeparator(file_cm);
-    var file_scm2_save = u$.System.Library.Gui.createContextMenuOption(file_cm, 'Save', null);
-    var file_scm2_saveas = u$.System.Library.Gui.createContextMenuOption(file_cm, 'Save As', null);
-    var file_scm2_saveall = u$.System.Library.Gui.createContextMenuOption(file_cm, 'Save All', null);
+    var file_scm2_save = u$.System.Library.Gui.createContextMenuOption(file_cm, 'Save', 'icon-floppy', null);
+    var file_scm2_saveas = u$.System.Library.Gui.createContextMenuOption(file_cm, 'Save As', null, null);
+    var file_scm2_saveall = u$.System.Library.Gui.createContextMenuOption(file_cm, 'Save All', null, null);
     u$.System.Library.Gui.addOptionSeparator(file_cm);
-    var file_scm3_dwnld = u$.System.Library.Gui.createContextMenuOption(file_cm, 'Download', null);
-    var file_scm3_imp = u$.System.Library.Gui.createContextMenuOption(file_cm, 'Import Project', null);
-    var file_scm3_exp = u$.System.Library.Gui.createContextMenuOption(file_cm, 'Export Project', null);
+    var file_scm3_dwnld = u$.System.Library.Gui.createContextMenuOption(file_cm, 'Download', 'icon-download', null);
+    var file_scm3_imp = u$.System.Library.Gui.createContextMenuOption(file_cm, 'Import Project', 'icon-doc-text-inv-1', null);
+    var file_scm3_exp = u$.System.Library.Gui.createContextMenuOption(file_cm, 'Export Project', 'icon-export', null);
     u$.System.Library.Gui.addOptionSeparator(file_cm);
-    var file_scm4_exit = u$.System.Library.Gui.createContextMenuOption(file_cm, 'Exit', null);
+    var file_scm4_exit = u$.System.Library.Gui.createContextMenuOption(file_cm, 'Exit', 'icon-off', null);
     
     //add options to edit: undo, redo, cut, copy, paste, delete, find, replace -------------------------------------------------------------------------
     var edit_cm = u$.System.Library.Gui.addContextMenuToItem(edit);
-    var edit_scm1_undo = u$.System.Library.Gui.createContextMenuOption(edit_cm, 'Undo', null);
-    var edit_scm1_redo = u$.System.Library.Gui.createContextMenuOption(edit_cm, 'Redo', null);
+    var edit_scm1_undo = u$.System.Library.Gui.createContextMenuOption(edit_cm, 'Undo', 'icon-ccw', null);
+    var edit_scm1_redo = u$.System.Library.Gui.createContextMenuOption(edit_cm, 'Redo', 'icon-cw', null);
     u$.System.Library.Gui.addOptionSeparator(edit_cm);
-    var edit_scm2_cut = u$.System.Library.Gui.createContextMenuOption(edit_cm, 'Cut', null);
-    var edit_scm2_copy = u$.System.Library.Gui.createContextMenuOption(edit_cm, 'Copy', null);
-    var edit_scm2_paste = u$.System.Library.Gui.createContextMenuOption(edit_cm, 'Paste', null);
-    var edit_scm2_delete = u$.System.Library.Gui.createContextMenuOption(edit_cm, 'Delete', null);
+    var edit_scm2_cut = u$.System.Library.Gui.createContextMenuOption(edit_cm, 'Cut', 'icon-scissors', null);
+    var edit_scm2_copy = u$.System.Library.Gui.createContextMenuOption(edit_cm, 'Copy', 'icon-clone', null);
+    var edit_scm2_paste = u$.System.Library.Gui.createContextMenuOption(edit_cm, 'Paste', 'icon-paste', null);
+    var edit_scm2_delete = u$.System.Library.Gui.createContextMenuOption(edit_cm, 'Delete', 'icon-trash-empty', null);
     u$.System.Library.Gui.addOptionSeparator(edit_cm);
-    var edit_scm3_find = u$.System.Library.Gui.createContextMenuOption(edit_cm, 'Find', null);
-    var edit_scm3_replace = u$.System.Library.Gui.createContextMenuOption(edit_cm, 'Replace', null);
+    var edit_scm3_find = u$.System.Library.Gui.createContextMenuOption(edit_cm, 'Find', 'icon-search-1', null);
+    var edit_scm3_replace = u$.System.Library.Gui.createContextMenuOption(edit_cm, 'Replace', 'icon-squares', null);
     
     //add options to view: footer menu: show status, show info, toolbar menu: fileoperations, run config, edit -----------------------------------------
     var view_cm = u$.System.Library.Gui.addContextMenuToItem(view);
     view_cm.setWidth(150);
-    var view_scm1_ssts = u$.System.Library.Gui.createContextMenuOption(view_cm, 'Show IDE Status', null);
-    var view_scm1_sinf = u$.System.Library.Gui.createContextMenuOption(view_cm, 'Show Info', null);
+    var view_scm1_ssts = u$.System.Library.Gui.createContextMenuOption(view_cm, 'Show IDE Status', 'icon-check-empty', null);
+    var view_scm1_sinf = u$.System.Library.Gui.createContextMenuOption(view_cm, 'Show Info', 'icon-check-empty', null);
     u$.System.Library.Gui.addOptionSeparator(view_cm);
-    var view_scm2_run = u$.System.Library.Gui.createContextMenuOption(view_cm, 'Show Run Toolbar', null);
-    var view_scm2_edit = u$.System.Library.Gui.createContextMenuOption(view_cm, 'Show Edit Toolbar', null);
+    var view_scm2_run = u$.System.Library.Gui.createContextMenuOption(view_cm, 'Show Run Toolbar', 'icon-check-empty', null);
+    var view_scm2_edit = u$.System.Library.Gui.createContextMenuOption(view_cm, 'Show Edit Toolbar', 'icon-check-empty', null);
     
     //add options to project: new project, open project, close project, options, run project, run configuration ----------------------------------------
     var proj_cm = u$.System.Library.Gui.addContextMenuToItem(project);
     //var proj_scm1 = u$.System.Library.Gui.addSubContextMenu(proj_cm);
-    var proj_scm1_new = u$.System.Library.Gui.createContextMenuOption(proj_cm, 'New Project', null);
-    var proj_scm1_open = u$.System.Library.Gui.createContextMenuOption(proj_cm, 'Open Project', null);
-    var proj_scm1_close = u$.System.Library.Gui.createContextMenuOption(proj_cm, 'Close Project', null);
+    var proj_scm1_new = u$.System.Library.Gui.createContextMenuOption(proj_cm, 'New Project', null, null);
+    var proj_scm1_open = u$.System.Library.Gui.createContextMenuOption(proj_cm, 'Open Project', null, null);
+    var proj_scm1_close = u$.System.Library.Gui.createContextMenuOption(proj_cm, 'Close Project', null, null);
     u$.System.Library.Gui.addOptionSeparator(proj_cm);
-    var proj_scm2_run = u$.System.Library.Gui.createContextMenuOption(proj_cm, 'Run', null);
-    var proj_scm2_runc = u$.System.Library.Gui.createContextMenuOption(proj_cm, 'Run Config', null);
-    var proj_scm2_opt = u$.System.Library.Gui.createContextMenuOption(proj_cm, 'Options', null);
+    var proj_scm2_run = u$.System.Library.Gui.createContextMenuOption(proj_cm, 'Run', 'icon-right-circled', null);
+    var proj_scm2_runc = u$.System.Library.Gui.createContextMenuOption(proj_cm, 'Run Config', 'icon-gauge', null);
+    var proj_scm2_opt = u$.System.Library.Gui.createContextMenuOption(proj_cm, 'Options', 'icon-cog-2', null);
     
     //add options to window: object explorer, editor, output, console, details, layout menu: sql, python, web, doc, reset layout -----------------------
     var win_cm = u$.System.Library.Gui.addContextMenuToItem(win);
     win_cm.setWidth(150);
-    var win_scm1_obex = u$.System.Library.Gui.createContextMenuOption(win_cm, 'Object Explorer', null);
-    var win_scm1_editor = u$.System.Library.Gui.createContextMenuOption(win_cm, 'Editor', null);
-    var win_scm1_output = u$.System.Library.Gui.createContextMenuOption(win_cm, 'Output', null);
-    var win_scm1_console = u$.System.Library.Gui.createContextMenuOption(win_cm, 'Console', null);
-    var win_scm1_details = u$.System.Library.Gui.createContextMenuOption(win_cm, 'Details', null);
+    var win_scm1_obex = u$.System.Library.Gui.createContextMenuOption(win_cm, 'Object Explorer', 'icon-check-empty', null);
+    var win_scm1_editor = u$.System.Library.Gui.createContextMenuOption(win_cm, 'Editor', 'icon-check-empty', null);
+    var win_scm1_output = u$.System.Library.Gui.createContextMenuOption(win_cm, 'Output', 'icon-check-empty', null);
+    var win_scm1_console = u$.System.Library.Gui.createContextMenuOption(win_cm, 'Console', 'icon-check-empty', null);
+    var win_scm1_details = u$.System.Library.Gui.createContextMenuOption(win_cm, 'Details', 'icon-check-empty', null);
     u$.System.Library.Gui.addOptionSeparator(win_cm);
-    var win_scm2_layout = u$.System.Library.Gui.createContextMenuOption(win_cm, 'Layout', null);
+    var win_scm2_layout = u$.System.Library.Gui.createContextMenuOption(win_cm, 'Layout', 'icon-columns', null);
         //add context to layout option
     var win_scm2_lt_cm = u$.System.Library.Gui.addContextMenuToOption(win_scm2_layout);
-    var win_scm2_lt_scm1_none = u$.System.Library.Gui.createContextMenuOption(win_scm2_lt_cm, 'None', null);
+    var win_scm2_lt_scm1_none = u$.System.Library.Gui.createContextMenuOption(win_scm2_lt_cm, 'None', null, null);
     
     //add options to tools: templates, options, external menu: ..if any --------------------------------------------------------------------------------
     var tools_cm = u$.System.Library.Gui.addContextMenuToItem(tools);
-    var tools_scm1_tmpl = u$.System.Library.Gui.createContextMenuOption(tools_cm, 'Templates', null);
-    var tools_scm1_prf = u$.System.Library.Gui.createContextMenuOption(tools_cm, 'preferences', null);
-    var tools_scm1_ext = u$.System.Library.Gui.createContextMenuOption(tools_cm, 'External Tools', null);
+    var tools_scm1_tmpl = u$.System.Library.Gui.createContextMenuOption(tools_cm, 'Templates', 'icon-table', null);
+    var tools_scm1_prf = u$.System.Library.Gui.createContextMenuOption(tools_cm, 'preferences', 'icon-params', null);
+    var tools_scm1_ext = u$.System.Library.Gui.createContextMenuOption(tools_cm, 'External Tools', 'icon-wrench-1', null);
     
     //add options to help: Help, Documents, Report Issues, About ---------------------------------------------------------------------------------------
     var help_cm = u$.System.Library.Gui.addContextMenuToItem(help);
-    var help_scm1_help = u$.System.Library.Gui.createContextMenuOption(help_cm, 'Help Contents', null);
-    var help_scm1_issues = u$.System.Library.Gui.createContextMenuOption(help_cm, 'Report Issues', null);
+    var help_scm1_help = u$.System.Library.Gui.createContextMenuOption(help_cm, 'Help Contents', 'icon-help', null);
+    var help_scm1_issues = u$.System.Library.Gui.createContextMenuOption(help_cm, 'Report Issues', 'icon-attention', null);
     u$.System.Library.Gui.addOptionSeparator(help_cm);
-    var help_scm2_about = u$.System.Library.Gui.createContextMenuOption(help_cm, 'About IDE', null);
+    var help_scm2_about = u$.System.Library.Gui.createContextMenuOption(help_cm, 'About IDE', 'icon-info', null);
     
 }
 
