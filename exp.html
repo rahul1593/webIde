@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<!--
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+-->
+<html>
+    <head>
+        <title>TODO supply a title</title>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    </head>
+    <body>
+        <style>
+            .fxnode{
+                height: 15px;
+            }
+            .fdnode{
+                position: relative;
+                font-size: 11px;
+            }
+            .nodeContents{
+                
+            }
+        </style>
+        <div style="position:absolute;top:50%;left:50%;transform:translateX(-50%) translateY(-50%);width:300px;height:300px;border:1px solid cadetblue">
+            
+            <div class="fdnode"><!--level:0 no extra <img/> tag-->
+                <div class="fxnode">
+                    <img alt='n' src='img/lastOpenNode.png' style='height:15px;width:15px;left:0px'/>
+                    <img alt='n' src='img/folder.png' style='height:15px;width:15px;left:15px;'/>
+                    <span style='position:absolute;top:0%;transform:translateY(2px)'>Project Name</span>
+                </div>
+                
+                <div class="fdnode"><!--level:1 1 extra <img/> tag-->
+                    <div class="fxnode">
+                        <img alt='n' src='img/none.png' style='height:15px;width:15px;'/>
+                        <img alt='n' src='img/lastOpenNode.png' style='height:15px;width:15px;'/>
+                        <img alt='n' src='img/folder.png' style='height:15px;width:15px;'/>
+                        <span style='position:absolute;top:0%;transform:translateY(2px)'>php</span>
+                    </div>
+                    <div class="nodeContents">
+                        <div class="fxnode fdnode"><!--level:2 2 extra <img> tag-->
+                            <img alt='n' src='img/none.png' style='height:15px;width:15px;'/>
+                            <img alt='n' src='img/thread.png' style='height:15px;width:15px;'/>
+                            <img alt='n' src='img/file.png' style='height:15px;width:15px;'/>
+                            <img alt='n' src='img/php.png' style='height:15px;width:15px;'/>
+                            <span style='position:absolute;top:0%;transform:translateY(2px)'>console.php</span>
+                        </div>
+                        <div class="fxnode fdnode"><!--level:2 2 extra <img> tag-->
+                            <img alt='n' src='img/none.png' style='height:15px;width:15px;'/>
+                            <img alt='n' src='img/thread.png' style='height:15px;width:15px;'/>
+                            <img alt='n' src='img/lastfile.png' style='height:15px;width:15px;'/>
+                            <img alt='n' src='img/php.png' style='height:15px;width:15px;'/>
+                            <span style='position:absolute;top:0%;transform:translateY(2px)'>lib.php</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="fxnode fdnode"><!--level:1 one extra <img> tag-->
+                    <img alt='n' src='img/none.png' style='height:15px;width:15px;'/>
+                    <img alt='n' src='img/file.png' style='height:15px;width:15px;'/>
+                    <img alt='n' src='img/js.png' style='height:15px;width:15px;;'/>
+                    <span style='position:absolute;top:0%;transform:translateY(2px)'>core.js</span>
+                </div>
+                <div class="fxnode fdnode"><!--level:1 one extra <img> tag-->
+                    <img alt='n' src='img/none.png' style='height:15px;width:15px;'/>
+                    <img alt='n' src='img/lastfile.png' style='height:15px;width:15px;'/>
+                    <img alt='n' src='img/js.png' style='height:15px;width:15px;;'/>
+                    <span style='position:absolute;top:0%;transform:translateY(2px)'>main.js</span>
+                </div>
+            </div>
+            <script>
+                var Root = function(parentWin){
+                    this.id = null;
+                    this.obj = document.createElement('div');
+                    this.parentObj = parentWin.obj;
+                    this.width = 150;
+                    this.childNodes = [];   //child nodes
+                    this.obj.style.display = "table";
+                    this.obj.style.width = this.width+'px';
+                    
+                    this.addNode = function(fileType, name){
+                        var n = new Node();
+                        n.type = fileType;
+                        n.name = name;
+                        n.fileObj.innerHTML = name;
+                        var tmp = name.split('.');
+                        if(tmp.length === 1){
+                            n.extension = '*';
+                        }
+                        n.extension = tmp[tmp.length-1];
+                        n.icnSrc = 'img/'+n.extension+'.png';
+                        n.iconObj.src = n.icnSrc;
+                        
+                        this.childNodes[this.childNodes.length] = n;
+                        return n;
+                    }
+                    
+                    return this;
+                }
+                
+                var Node = function(){
+                    this.obj = null;            //table div object
+                    this.linkObj = null;        //image in first cell showing link
+                    this.iconObj = null;        //image in second cell showing file icon
+                    this.fileObj = null;        //text in third cell showing file name
+                    this.parentNode = null;
+                    this.parentTable = null;
+                    //meta
+                    this.id = null;
+                    this.type = 'f';        //one of f/d
+                    this.name = null;       //name of the entry
+                    this.extension = '';    //one of txt/sql/py/html/php
+                    this.icnSrc = '';       //src for icon based on extension
+                    this.childNodes = [];   //child nodes
+                    
+                    this.addNode = function(fileType, name){
+                        var n = new Node();
+                    }
+                    
+                    function onExpanded(){
+                        
+                    }
+                    function onCollapsed(){
+                        
+                    }
+                    
+                    var row = document.createElement('div');
+                    row.style = "display:table-row";
+                    var cell = document.createElement('div');
+                    cell.style = "display:table-cell;width:15px;height:15px";
+                    var tmp = document.createElement('img');
+                    tmp.style = "width:100%;height:100%;";
+                    tmp.src = "img/closedNode.png";
+                    cell.appendChild(tmp);
+                    row.appendChild(tmp);
+                    this.linkObj = tmp;
+                    
+                    cell = document.createElement('div');
+                    cell.style = "display:table-cell;width:15px;height:15px";
+                    tmp = document.createElement('img');
+                    tmp.style = "width:100%;height:100%;";
+                    cell.appendChild(tmp);
+                    row.appendChild(tmp);
+                    this.iconObj = tmp;
+                    
+                    cell = document.createElement('div');
+                    cell.style = "display:table-cell;height:15px";
+                    tmp = document.createElement('span');
+                    tmp.style = "font-size:12px";
+                    cell.appendChild(tmp);
+                    row.appendChild(tmp);
+                    this.fileObj = tmp;
+                    
+                    return this;
+                }
+                
+            </script>
+        </div>
+    </body>
+</html>
