@@ -1124,7 +1124,9 @@ u$ = {
                                 return true;
                             }
                             for(var i=0;i<node.childNodes.length;i++){
-                                resetBackground(node.childNodes[i]);
+                                if(resetBackground(node.childNodes[i])){
+                                    return true;
+                                }
                             }
                             return false;
                         }
