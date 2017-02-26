@@ -1047,20 +1047,30 @@ u$ = {
                             tmp.alt = 'n';
                             tmp.src = n.icnSrc;
                             tmp.data = n;
+                            tmp.onclick = n.itemClick;
+                            if(fileType === 'd'){
+                                tmp.ondblclick = n.nodeClick;
+                            }
                             contDiv.appendChild(tmp);
                             //add text
                             tmp = document.createElement('span');
-                            tmp.style='position:absolute;top:0%;transform:translateY(2px);padding-left:3px';
+                            tmp.style='position:absolute;top:0%;transform:translateY(2px);padding-left:3px;background-color:transparent';
                             tmp.innerHTML = name;
+                            tmp.onclick = n.itemClick;
+                            if(fileType === 'd'){
+                                tmp.ondblclick = n.nodeClick;
+                            }
                             n.textObj = tmp;
                             tmp.data = n;
                             contDiv.appendChild(tmp);
                             
                             this.childNodes[this.childNodes.length] = n;
+                            n.root = this;
                             return n;
                         }
                     },
                     itemTreeNode: function(){
+                        this.root = null;
                         this.obj = null;            //div object
                         this.dataObj = null;        //div containing current info
                         this.containerObj = null;   //div containing child objects...is created if type is folder
@@ -1079,6 +1089,7 @@ u$ = {
                         
                         function onNodeClick(e){
                             var evt = e || window.event || event;
+                            evt.preventDefault();
                             var node = evt.target.data;
                             var state;
                             //toggle visibility
@@ -1105,6 +1116,31 @@ u$ = {
                             }
                         }
                         this.nodeClick = onNodeClick;
+                        
+                        function resetBackground(node){ //returns true if non-transparent testObj is found, else false
+                            if(node.textObj.style.backgroundColor !== 'transparent'){
+                                node.textObj.style.backgroundColor = 'transparent';
+                                return true;
+                            }
+                            for(var i=0;i<node.childNodes.length;i++){
+                                resetBackground(node.childNodes[i]);
+                            }
+                            return false;
+                        }
+                        
+                        function onItemClick(e){
+                            var evt = e || window.event || event;
+                            var node = evt.target.data;
+                            //clear all backgrounds
+                            for(var i=0;i<node.root.childNodes.length;i++){
+                                if(resetBackground(node.root.childNodes[i])){
+                                    break;
+                                }
+                            }
+                            //set the color
+                            node.textObj.style.backgroundColor = '#cccccc';
+                        }
+                        this.itemClick = onItemClick;
                         
                         this.addNode = function(fileType, name, isLastNode){
                             var n = new u$.System.Library.Gui.Objects.itemTreeNode();
@@ -1180,16 +1216,25 @@ u$ = {
                             tmp.alt = 'n';
                             tmp.src = n.icnSrc;
                             tmp.data = n;
+                            tmp.onclick = onItemClick;
+                            if(fileType === 'd'){
+                                tmp.ondblclick = onNodeClick;
+                            }
                             contDiv.appendChild(tmp);
                             //add text
                             tmp = document.createElement('span');
-                            tmp.style='position:absolute;top:0%;transform:translateY(2px);padding-left:3px';
+                            tmp.style='position:absolute;top:0%;transform:translateY(2px);padding-left:3px;background-color:transparent';
                             tmp.innerHTML = name;
+                            tmp.onclick = onItemClick;
+                            if(fileType === 'd'){
+                                tmp.ondblclick = onNodeClick;
+                            }
                             n.textObj = tmp;
                             tmp.data = n;
                             contDiv.appendChild(tmp);
                             
                             this.childNodes[this.childNodes.length] = n;
+                            n.root = this.root;
                             return n;
                         }
 
