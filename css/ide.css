@@ -5,7 +5,7 @@ and open the template in the editor.
 */
 /* 
     Created on : 7 Jan, 2017, 1:44:59 PM
-    Author     : Rahul Bhartari
+    Author     : geek
 */
 
 .ideFont{
@@ -16,23 +16,32 @@ and open the template in the editor.
     text-align: left;
     font-family: Verdana, Arial, Helvetica, sans-serif;
     color: black;
-    font-size: 10pt;
+    font-size: 10px;
 }
 
 .sfH1TextStyle{
     text-align: left;
     font-family: Verdana, Arial, Helvetica, sans-serif;
-    font-size: 12pt;
+    font-size: 12px;
 }
 
 #menuBar{
     position: absolute;
     left: 0%;
-    width: 99.8%;
+    width: 100%;
     top: 0%;
-    min-height: 15pt;
-    max-height: 27pt;
+    height: 19px;
     border: none;
+    margin: 0;
+    background-color: #cccccc;
+}
+
+#toolBar{
+    position: absolute;
+    left: 0%;
+    width: 100%;
+    top: 19px;
+    height: 30px;
     margin: 0;
     background-color: #cccccc;
 }
@@ -40,9 +49,10 @@ and open the template in the editor.
 #workArea{
     position: absolute;
     left: 0.1%;
-    width: 99.7%;
-    top: 5.4%;
-    height: 90.2%;
+    right: 0.1%;
+    top: 50px;
+    bottom: 5%;
+    /*background-color: black;*/
 }
 
 #footer{
@@ -57,4 +67,14 @@ and open the template in the editor.
     border: none;
     margin: 0;
     background-color: #aaaaaa;
+}
+
+.fdnode{
+    position: relative;
+    font-size: 11px;
+}
+.fxnode{
+    height: 15px;
+}
+.nodeContents{
 }
