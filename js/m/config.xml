@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<root>
+    <menu>
+        <menuItem>
+            <item name='item_text'>
+                <contextMenu attributes=''>
+                    <menuOption attributes='' onclick=''>option_text</menuOption>
+                </contextMenu>
+            </item>
+        </menuItem>
+    </menu>
+    <windows>
+        <
+    </windows>
+    <meta>
+        
+    </meta>   
+</root>
