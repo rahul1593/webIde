@@ -1,4 +1,7 @@
-/*
+/* 
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
  * @geekubuntu
  * Author: Rahul Bhartari
  */
@@ -167,7 +170,7 @@ u$ = {
                         w = cx;
                         cx = obj_cstyle.minWidth;
                         if(cx === 'auto' || cx === '0px'){
-                            if(leftObjList[i].minWidth != null){
+                            if(leftObjList[i].minWidth !== null){
                                 if(min_width<leftObjList[i].minWidth){
                                     min_width = leftObjList[i].minWidth;
                                 }
@@ -196,7 +199,7 @@ u$ = {
                         right_width_list[i] = cx;
                         cx = obj_cstyle.minWidth;
                         if(cx === 'auto' || cx === '0px'){
-                            if(rightObjList[i].minWidth != null){
+                            if(rightObjList[i].minWidth !== null){
                                 if(min_width<rightObjList[i].minWidth){
                                     min_width = rightObjList[i].minWidth;
                                 }
@@ -211,7 +214,7 @@ u$ = {
                         }
                         //get the left offset
                         cx = obj_cstyle.left;
-                        if(cx == 'auto'){
+                        if(cx === 'auto'){
                             cx = parseint(obj_cstyle.right.split('px')[0], 10);
                             right_left_list[i] = cx-right_width_list[i];
                         }else{
@@ -267,7 +270,7 @@ u$ = {
                         h = cy;
                         cy = obj_cstyle.minHeight;
                         if(cy === 'auto' || cy === '0px'){
-                            if(topObjList[i].minHeight != null){
+                            if(topObjList[i].minHeight !== null){
                                 if(min_height<topObjList[i].minHeight){
                                     min_height = topObjList[i].minHeight;
                                 }
@@ -297,7 +300,7 @@ u$ = {
                         
                         cy = obj_cstyle.minHeight;
                         if(cy === 'auto' || cy === '0px'){
-                            if(bottomObjList[i].minHeight != null){
+                            if(bottomObjList[i].minHeight !== null){
                                 if(min_height<bottomObjList[i].minHeight){
                                     min_height = bottomObjList[i].minHeight;
                                 }
@@ -375,7 +378,7 @@ u$ = {
                     menuBarItem: '.uc_menuBarItem{font-size:10px;padding-left:2px;padding-right:2px;outline:none;cursor:context-menu}\n\
                                     .uc_menuBarItem:hover,.uc_menuBarItem:active\n\
                                     {border:1px solid #cccccc}',
-                    menuItemOption: '.uc_menuItemOption{background-color:#eeeeee;font-size:10px}\n\
+                    menuItemOption: '.uc_menuItemOption{background-color:#eeeeee;font-size:10px;z-index:100}\n\
                                     .uc_menuItemOption:hover,.uc_menuItemOption:active{background-color:white;cursor:context-menu}',
                     icon: '.uc_icon{display:inline-block;border:1px solid #cccccc}\n.uc_icon:hover,.uc_icon:active{border:1px solid white}',
                     icon2: '.uc_icon2{display:inline-block;border:1px solid white}\n.uc_icon2:hover,.uc_icon2:active{border:1px solid black}',
@@ -387,7 +390,14 @@ u$ = {
                                 .uc_toolsDragger:hover{cursor:move}',// t r b l
                     button: '.uc_button{text-align:center;margin:0;padding:4px 8px 4px 8px;border-radius:4px;border:1px solid #eeeeee;background-color:#dddddd;box-shadow: 0px 0px 5px 0px #eeeeee;}\n\
                              .uc_button:hover{cursor:pointer;border:1px solid #9999ff;background-color:#e1e1e1;}',
-                    close: '.uc_close{border:1px solid transparent} .uc_close:hover{border:1px solid black}'
+                    close: '.uc_close{border:1px solid transparent} .uc_close:hover{border:1px solid black}',
+                    editor: '.uc_editor{position:absolute;display:block;width:100%;height:100%;border:none}\n\
+                            .uc_numbers{display:inline-block;position:relative;top:0%;height:100%;width:auto;float:left;min-width:20px;border:1px solid gray;}\n\
+                            .uc_gap{display:inline-block;position:relative;top:0%;height:100%;width:10px;float:left;min-width:10px;border:1px solid blue;}\n\
+                            .uc_editor_area{display:inline-block;position:relative;top:0%;height:99.5%;float:left;}  /*manage width:364px;*/\n\
+                            .uc_editor_backend{position:absolute;top:0%;height:100%;left:0%;width:100%;max-width:100%;border:2px solid red;z-index:0;}\n\
+                            .uc_editor_frontend{white-space:pre-wrap;position:absolute;top:0%;height:100%;left:0%;width:100%;max-width:100%;overflow-y:auto;border:1px solid aqua;z-index:10;}\n\
+                            .uc_editor_line{display:block;left:0%;width:100%;} .uc_editor_line:active{background-color:#dddddd;}'
                 },
                 __data:{
                     itemClicked: false,
@@ -697,7 +707,7 @@ u$ = {
                         this.possibleSourcesList = [];
                         this.search = function(){
                             //search the input
-                        }
+                        };
                     },
                     table: function(){
                         this.id = null;
@@ -733,6 +743,7 @@ u$ = {
                         this.obj = null;
                         this.parentObj = null;
                         this.headWinObj = null;
+                        this.extraTabSpanObj = null;
                         this.buttonsWin = null;
                         this.dropDownIconObj = null;
                         this.dropDownDivObj = null;
@@ -741,17 +752,37 @@ u$ = {
                         this.activeTab = null;
                         this.headHeight = 16;
                         this.tabWidth = 150;
+                        this.minTabWidth = 80;
+                        this.maxTabWidth = 150;
+                        this.tabBackSrc = 'img/tabBack.png';
                         var clicked=false;
+                        
+                        this.setTabBackground = function(src){
+                            this.tabBackSrc = src;
+                            for(var i=0;i<this.tabList.length;i++){
+                                this.tabList[i].setBackground(src);
+                            }
+                        };
+                        
+                        function display_dots(tbg){
+                            for(var i=0;i<tbg.tabList.length;i++){
+                                if(tbg.tabList[i].headObj.style.display === 'none'){
+                                    tbg.extraTabSpanObj.innerHTML = '&nbsp;...';
+                                    return;
+                                }
+                            }tbg.extraTabSpanObj.innerHTML = '';
+                        };
                         
                         function toggle_tab_display(tbg){
                             var tbl = tbg.tabList;
-                            var max_w = parseInt(window.getComputedStyle(tbg.headWinObj).width.split('px')[0], 10)-60;
+                            var max_w = parseInt(window.getComputedStyle(tbg.headWinObj).width.split('px')[0], 10)-20;
                             var tw = tbg.activeTab.tabWidth;
                             var cnvt = parseInt(max_w/tw, 10);
                             var s=0, l=cnvt;
                             if(tbg.tabList.length<cnvt){
-                                return;
+                                return; //if no of tabs is less than total tabs that could be accumulated
                             }
+                            //get the position of active tab and get a range from both side inside which the tabs will be visible
                             for(var i=0;i<tbg.tabList.length;i++){
                                 if(tbg.tabList[i].name === tbg.activeTab.name){
                                     if(i+1<=cnvt){
@@ -773,10 +804,10 @@ u$ = {
                                 for(var i=l;i<tbg.tabList.length;i++){
                                     tbg.tabList[i].headObj.style.display = 'none';
                                 }
-                            }
-                        }
+                            }display_dots(tbg);
+                        };
                         
-                        function resizer(){
+                        function resizer(e){
                             var tbgList = u$.App.TabGroups;
                             var tbg, w;
                             /*
@@ -788,38 +819,38 @@ u$ = {
                              */
                             for(var i=0;i<tbgList.length;i++){
                                 tbg = tbgList[i];
-                                var width = parseInt(window.getComputedStyle(tbg.headWinObj).width.split('px')[0], 10)-60;
-                                if(tbg.tabList[0].tabWidth * tbg.tabList.length < width){    //to increase width if space is available
-                                    w = parseInt(width/tbg.tabList.length, 10);
-                                    if(w>150){return toggle_tab_display(tbg);}
-                                    for(var i=0; i<tbg.tabList.length;i++){
-                                        tbg.tabList[i].setWidth(w);
-                                    }
-                                    toggle_tab_display(tbg);
+                                var width = parseInt(window.getComputedStyle(tbg.headWinObj).width.split('p')[0], 10)-20;
+                                w = parseInt(width/tbg.tabList.length, 10);
+                                //verify min to max range of the tab width
+                                if(w < tbg.minTabWidth){
+                                    w = tbg.minTabWidth;
                                 }else{
-                                    var w = parseInt(width/tbg.tabList.length, 10);
-                                    if(w<80){return toggle_tab_display(tbg);}   //to hide tabs when minimum limit is reached
-                                    for(var i=0; i<tbg.tabList.length;i++){ //to decrease width if space is not available
-                                        tbg.tabList[i].setWidth(w);
+                                    if(w > tbg.maxTabWidth){
+                                        w = tbg.maxTabWidth;
                                     }
+                                }//set the width
+                                for(var j=0; j<tbg.tabList.length;j++){
+                                    tbg.tabList[j].setWidth(w);
                                 }
+                                toggle_tab_display(tbg);
                             }
-                        }
+                        };
                         window.addEventListener('resize', resizer, false);
                         
                         this.resizeTabHead = function(e){
-                            resizer();
-                        }
+                            resizer(e);
+                        };
                         
                         this.shiftLeft = function(tbg){
                             var tbl = tbg.tabList;
                             if(tbg.tabList[tbg.tabList.length-1].headObj.style.display !== 'none'){
                                 return; //return is rightmost tab is visible
                             }
-                            //else find first element from beginning which is visible, make it invisible
+                            //else find first element from beginning which is visible, make it invisible and next to it visible
                             for(var i=0;i<tbg.tabList.length;i++){
                                 if(tbg.tabList[i].headObj.style.display !== 'none'){
                                     tbg.tabList[i].headObj.style.display = 'none';
+                                    tbg.tabList[i+1].headObj.style.display = 'block';   //in case if there just 2 elements
                                     break;
                                 }
                             }
@@ -830,7 +861,7 @@ u$ = {
                                     return;
                                 }
                             }
-                        }
+                        };
                         
                         this.shiftRight = function(tbg){
                             var tbl = tbg.tabList;
@@ -851,7 +882,7 @@ u$ = {
                                     return;
                                 }
                             }
-                        }
+                        };
                         
                         this.dropDown = function(e, tbg){
                             var evt = e || window.event || event;
@@ -862,21 +893,22 @@ u$ = {
                             }
                             if(clicked){
                                 if(tbg.dropDownDivObj.style.display === "none"){
-                                    tbg.dropDownDivObj.style.display = "table";
+                                    tbg.dropDownDivObj.style.display = "block";
+                                    tbg.dropDownDivObj.style.position = "absolute";
                                 }else{
                                     tbg.dropDownDivObj.style.display = "none";
                                 }
                             }else{
                                 tbg.dropDownDivObj.style.display = "none";
                             }
-                        }
+                        };
                         
                         function addRow2TabList(tbg, tabHead){
                             var row = document.createElement('div');
                             row.style.display = "block";
                             row.appendChild(tabHead);
                             tbg.dropDownDivObj.appendChild(tabHead);
-                        }
+                        };
                         
                         this.addTab = function(tab){
                             //append to tabgroup head
@@ -885,7 +917,7 @@ u$ = {
                             this.tabList[this.tabList.length] = tab;
                             this.contentWinObj.appendChild(tab.contentWindow.obj);
                             tab.headObj.onclick = function(){
-                                tab.parentTabGroup.setTabActive(tab.parentTabGroup, tab);
+                                return tab.parentTabGroup.setTabActive(tab.parentTabGroup, tab);
                             };
                             tab.setWidth(this.tabWidth);
                             tab.headObj.onclick();
@@ -893,42 +925,63 @@ u$ = {
                             var imgs = tab.ddListObj.getElementsByTagName('img');
                             for(var i=0; i<imgs.length;i++){
                                 if(imgs[i].alt === 'x'){
-                                    imgs[i].onclick = function(e){tab.parentTabGroup.closeTab(tab.name);};
+                                    imgs[i].onclick = function(e){
+                                        tab.parentTabGroup.closeTab(tab);
+                                    };
                                 }
                             }
                             addRow2TabList(this, tab.ddListObj);
-                            this.obj.addEventListener('resize', resizer, false);
                             resizer();
                         };
-                        this.closeTab = function(tabName){
+                        
+                        this.closeTab = function(tab){
                             //remove its object from head
                             for(var i=0;i<this.tabList.length;i++){
-                                if(this.tabList[i].name === tabName){
-                                    var tab = this.tabList[i];
+                                if(this.tabList[i] === tab){
+                                    //var tab = this.tabList[i];
                                     this.headWinObj.removeChild(tab.headObj);
                                     this.dropDownDivObj.removeChild(tab.ddListObj);
-                                    this.contentWinObj.obj.removeChild(tab.contentWindow.obj);
+                                    this.contentWinObj.removeChild(tab.contentWindow.obj);
                                     this.tabList.splice(i,1);
+                                    if(tab === this.activeTab){
+                                        if(i>0){
+                                            return this.setTabActive(this, this.tabList[i-1]);
+                                        }else{
+                                            return this.setTabActive(this, this.tabList[i]);
+                                        }
+                                    }
                                     return;
                                 }
                             }
                             //remove its object from contentwin
                         };
+                        
                         this.setTabActive = function(tbg, tab){
+                            var f=0;
                             //display corresponding content window
                             for(var i=0;i<tbg.tabList.length;i++){
-                                if(tbg.tabList[i].name === tab.name){
-                                    tab.contentWindow.obj.style.display = 'block';
-                                    tab.contentWindow.obj.contentEditable = true;
-                                    tab.headObj.style.color = 'white';
-                                    tab.headObj.style.backgroundColor = "#999999";
-                                    this.activeTab = tab;
-                                }else{
-                                    tbg.tabList[i].contentWindow.obj.style.display = 'none';
-                                    tbg.tabList[i].headObj.style.color = 'black';
-                                    tbg.tabList[i].headObj.style.backgroundColor = '#eeeeee';
+                                if(tbg.tabList[i] === tab){
+                                    f=1;
+                                    break;
                                 }
                             }
+                            if(f>0){
+                                for(var i=0;i<tbg.tabList.length;i++){
+                                    tbg.tabList[i].contentWindow.obj.style.display = 'none';
+                                    tbg.tabList[i].headObj.style.color = 'black';
+                                    tbg.tabList[i].headObj.style.backgroundImage = 'url('+tbg.tabBackSrc+')';
+                                    tbg.tabList[i].iconObj.src = tbg.tabList[i].iconSrc;
+                                }
+                            }
+                            if(f<1){
+                                return;
+                            }
+                            tab.contentWindow.obj.style.display = 'block';
+                            tab.headObj.style.color = 'white';
+                            tab.headObj.style.backgroundImage = 'url(img/s_'+tbg.tabBackSrc.split('/')[1]+')';
+                            tab.iconObj.src = 'img/s_'+tab.iconSrc.split('/')[1];
+                            tbg.activeTab = tab;
+                            return tab;
                         };
                     },
                     tab: function(){
@@ -944,9 +997,15 @@ u$ = {
                         this.backgroundImageUrl = 'img/tabBack.png';
                         this.iconType = 'png';      //png or svg or null
                         this.iconSrc = null;
+                        this.iconObj = null;
                         this.name = null;
                         this.contentWindow = null;
                         this.parentTabGroup = null;
+                        
+                        this.setBackground = function(src){
+                            this.backgroundImageUrl = src;
+                            this.headObj.style.backgroundImage = "url("+src+")";
+                        };
                         
                         this.addContent = function(window){
                             this.contentWindow = window;
@@ -956,13 +1015,53 @@ u$ = {
                             this.tabWidth = w;
                             this.headObj.style.width = w+'px';
                             this.tbNameDivObj.style.width = (this.tabWidth-((this.tabHeight*2)+4))+'px';
-                        }
+                        };
                     },
                     statusCycle: function(){
                         //animated circle to show loading status
                     },
-                    statusBar: function(){
+                    statusBar: function(parentWin){
                         //bar to show status
+                        this.id = null;
+                        this.obj = document.createElement('div');
+                        this.parentObj = parentWin.obj;
+                        this.completedObj = document.createElement('div');
+                        this.remainingObj = document.createElement('div');
+                        this.height = 15;
+                        this.width = 50;
+                        this.progressColor = null;
+                        this.remainingColor = null;
+                        var progress = 0;
+                        
+                        this.obj.style.height = this.height;
+                        this.obj.style.width = this.width;
+                        this.completedObj.style.height = "100%";
+                        this.completedObj.style.left = "0%";
+                        this.completedObj.style.width = "1%";
+                        this.remainingObj.style.height = "100%";
+                        this.remainingObj.style.width = "99%";
+                        this.remainingObj.style.right = "0%";
+                        
+                        this.obj.appendChild(this.completedObj);
+                        this.obj.appendChild(this.remainingObj);
+                        this.parentObj.appendChild(this.obj);
+                        
+                        this.setBarDimensions = function(h, w){
+                            this.obj.style.height = h+'px';
+                            this.obj.style.width = w+'px';
+                            this.height = h;
+                            this.width = w;
+                        };
+                        
+                        this.setProgress = function(progress){
+                            if(progress>100){
+                                progress = 100;
+                            }
+                            if(progress<0){
+                                progress = 0;
+                            }
+                            
+                        };
                     },
                     itemSeparator: function(){
                         //a simple item to create separations
@@ -1063,12 +1162,13 @@ u$ = {
                             }
                             n.textObj = tmp;
                             tmp.data = n;
+                            tmp.addEventListener('mousedown', function(e){ e.preventDefault(); }, false);
                             contDiv.appendChild(tmp);
                             
                             this.childNodes[this.childNodes.length] = n;
                             n.root = this;
                             return n;
-                        }
+                        };
                     },
                     itemTreeNode: function(){
                         this.root = null;
@@ -1090,15 +1190,21 @@ u$ = {
                         
                         function onNodeClick(e){
                             var evt = e || window.event || event;
-                            evt.preventDefault();
+                            //evt.preventDefault();
                             var node = evt.target.data;
                             var state;
                             //toggle visibility
-                            if(node.containerObj.style.display !== 'none'){
-                                node.containerObj.style.display = "none";
+                            if(node.containerObj.style.opacity !== "0"){
+                                node.containerObj.style.transition = "all 2s ease-out";
+                                node.containerObj.style.opacity = "0";
+                                node.containerObj.style.height = "0";
+                                node.containerObj.style.overflow = "hidden";
                                 state = 'closed';
                             }else{
-                                node.containerObj.style.display = "block";
+                                node.containerObj.style.transition = "all 1.5s ease-out";
+                                node.containerObj.style.opacity = "1";
+                                node.containerObj.style.height = "auto";
+                                //node.containerObj.style.display = "block";
                                 state = 'open';
                             }
                             //toggle icons
@@ -1234,31 +1340,138 @@ u$ = {
                             }
                             n.textObj = tmp;
                             tmp.data = n;
+                            tmp.addEventListener('mousedown', function(e){ e.preventDefault(); }, false);
                             contDiv.appendChild(tmp);
                             
                             this.childNodes[this.childNodes.length] = n;
                             n.root = this.root;
                             return n;
-                        }
+                        };
 
                         function onExpanded(){
-
+                            //functionality to be defined
                         }
                         function onCollapsed(){
-
+                            //functionality to be defined
                         }
+                    },
+                    propertyBox: function(){
+                        
                     },
                     editorToolBar: function(){
                         //this is attached to every editor window
                     },
-                    __editor: function(){
+                    __editor: function(parentWin){
                         //core editor object, that is parent object for word and code editors
+                        /*
+                         <div class="uc_editor">
+                            <div class="uc_numbers">1<br>2<br>3<br>4<br>5<br>6<br>7<br>8<br>9<br>10<br>11<br>12<br>13</div>
+                            <div class="uc_gap"></div>
+                            <div class="uc_editor_area">
+                                <div class="uc_editor_backend"></div>
+                                <div class="uc_editor_frontend" contenteditable="true">
+                                    <z class="line">This is line 1</z>
+                                    <z class="line">This is new fsdfsdfsdfsdline 2</z>
+                                </div>
+                            </div>
+                        </div>
+                         */
+                        //instance object variable
+                        var editor = this;
+                        this.editorDiv = document.createElement('div');    //editor div
+                        this.numberDiv = document.createElement('div');
+                        this.gapDiv = document.createElement('div');
+                        this.editorAreaDiv = document.createElement('div');
+                        this.editorBackend = document.createElement('div');
+                        this.editorFrontend = document.createElement('div');
+                        this.parentObj = parentWin.obj;
+                        
+                        //dimensional instance variables
+                        var gapWidth = 10;     //gap width in pixels
+                        var editorAreaWidth = 200; //width of editing area in pixels
+                        
+                        //lines in the document
+                        this.codeLines = [];        //text rows in the document in order
+                        this.activeLine = null;     //line which user is editing currently
+                        var active_line_index = -1;
+                        var last_line_number = 0;
+                        var editorRange = document.createRange();
+                        
+                        //set classes (div roles)
+                        this.editorDiv.className = 'uc_editor sfTextStyle';
+                        this.numberDiv.className = 'uc_numbers';
+                        this.gapDiv.className = 'uc_gap';
+                        this.editorAreaDiv.className = 'uc_editor_area';
+                        this.editorBackend.className = 'uc_editor_backend';
+                        this.editorFrontend.className = 'uc_editor_frontend';
+                        this.editorFrontend.contentEditable = "true";
+                        //place the objects in DOM
+                        this.editorAreaDiv.appendChild(this.editorBackend);
+                        this.editorAreaDiv.appendChild(this.editorFrontend);
+                        this.editorDiv.appendChild(this.numberDiv);
+                        this.editorDiv.appendChild(this.gapDiv);
+                        this.editorDiv.appendChild(this.editorAreaDiv);
+                        this.parentObj.appendChild(this.editorDiv);
+                        document.execCommand('defaultParagraphSeparator', false, 'z');
+                        //adjust width of editing area
+                        function adjustWidth(){
+                            var e_w = editor.editorDiv.getBoundingClientRect();
+                            e_w = e_w.right-e_w.left;
+                            
+                            var n_w = editor.numberDiv.getBoundingClientRect();
+                            n_w = n_w.right-n_w.left;
+                            
+                            editorAreaWidth = e_w-n_w-gapWidth-2;
+                            editor.editorAreaDiv.style.width = editorAreaWidth+'px';
+                        };
+                        
+                        //action functions
+                        this.addLine = function(){
+                            
+                        };
+                        this.deleteRow = function(row){
+                            
+                        };
+                        
+                        function onLineFeed(){
+                            
+                        }
+                        function onKeyPress(e){
+                            var evt = e || window.event || event;
+                            var c = e.which || e.keyCode;
+                            if(c === 13){
+                                evt.preventDefault();
+                                editor.addLine();
+                            }return true;
+                        }
+                        function onClick(e){
+                            var evt = e || window.event || event;
+                            evt.preventDefault();
+                            var z = evt.target;
+                            editor.activeLine = evt.target;
+                        }
+                        
+                        window.addEventListener('resize', adjustWidth, false);
+                        this.editorFrontend.addEventListener('keypress', onKeyPress);
+                        this.editorFrontend.addEventListener('click', onClick);
+                        adjustWidth();
+                        this.addLine();
+                        return this;
                     },
                     wordEditor: function(){
                         //word editor
                     },
-                    codeEditor: function(){
+                    codeEditor: function(parentWin){
                         //code editor with different options
+                        this.id = null;
+                        this.editor = u$.System.Library.Gui.Objects.__editor(parentWin);
+                        this.obj = this.editor.editorDiv;
+                        
+                        var keystore = {
+                            basic:[{'this':1}, {'keyword':2}]
+                        };
+                        var colormap = [{1:'#3311aa'}, {2:'#aa3355'}];
+                        return this;
                     },
                     scrollBar: function(){
                         //custom scroll bar
@@ -1281,7 +1494,7 @@ u$ = {
                         }
                     }
                     div.className += ' uc_window';
-                    if(div === null || div == 'undefined'){
+                    if(div === null || div === 'undefined'){
                         return false;
                     }
                     if(parentWin !== null){
@@ -1304,7 +1517,7 @@ u$ = {
                             elm[property]=attributes[property];
                         }
                     }
-                    if(elm === null || elm == 'undefined'){
+                    if(elm === null || elm === 'undefined'){
                         return false;
                     }
                     var obj = new u$.Classes.Object();
@@ -1363,7 +1576,7 @@ u$ = {
                 createMenuBarItem: function(parentBar, text, css){
                     var menuItem = document.createElement('button');
                     menuItem.innerHTML = text;
-                    if(css != null){
+                    if(css !== null){
                         menuItem.style = css;
                     }
                     
@@ -1580,6 +1793,11 @@ u$ = {
                     var head = document.createElement('div');
                     head.style = "position:absolute;top:0px;left:0px;right:50px;border-bottom:1px solid #999999;background-color:#eeeeee;";
                     head.style.height = tbg.headHeight+'px';
+                    var esp = document.createElement('span');
+                    tbg.extraTabSpanObj = esp;
+                    esp.style.fontSize = '12px';
+                    head.appendChild(esp);
+                    
                     var bwin = u$.System.Library.Gui.createWindow(tbg, {style:"position:absolute;top:0px;width:50px;right:0px;height:16px;\n\
                             border-bottom:1px solid #999999;background-color:#eeeeee;text-align:right"});
                     var sh_left = u$.System.Library.Gui.createIconButton(bwin, 'img/left.png', 'l', function(e){tbg.shiftRight(tbg);});
@@ -1658,7 +1876,10 @@ u$ = {
                     cb.style.padding = "1px 0px 0px 1px";
                     cb.style.height = (tab.tabHeight/2)-1 +'px';
                     cb.style.width = (tab.tabHeight/2)-1 +'px';
-                    cb.onclick = function(e){tab.parentTabGroup.closeTab(tabName);};
+                    cb.onclick = function(e){
+                        e.preventDefault();
+                        tab.parentTabGroup.closeTab(tab);
+                    };
                     close.appendChild(cb);
                     //append to head
                     head.appendChild(icn);
@@ -1675,6 +1896,7 @@ u$ = {
                     tab.headObj = head;
                     tab.ddListObj = ddl;
                     tab.iconSrc = icon_src;
+                    tab.iconObj = icn;
                     tab.name = tabName;
                     return tab;
                 },
@@ -1707,6 +1929,9 @@ u$ = {
                     toolsGroup.parentToolBar = parentToolBar;
                     parentToolBar.addToolsGroup(toolsGroup);
                     return toolsGroup;
+                },
+                createPropertyBox: function(parentWin, propTreeObject){
+                    
                 }
             },
             Utility:{
@@ -1724,7 +1949,7 @@ u$ = {
         },
         setRootWindow: function(rootDivId){
             var rdiv = document.getElementById(rootDivId);
-            if(!(rdiv === null || rdiv == 'undefined')){
+            if(!(rdiv === null || rdiv === 'undefined')){
                 u$.App.RootWindow = rdiv;
             }
         },
