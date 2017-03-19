@@ -2,6 +2,8 @@
  * To change this license header, choose License Headers in Project Properties.
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
+ * @geekubuntu
+ * Author: Rahul Bhartari
  */
 
 var objExp_style = 'position:absolute;left:0%;width:18.1%;top:0%;height:99.8%;border-top:1px solid black;border-bottom:1px solid black;border-left:1px solid black';
@@ -185,12 +187,13 @@ function init_toolbar(){
 
 function init_editorWin(){
     var tbg = u$.System.Library.Gui.createTabGroup(editorWin);
+    tbg.setTabBackground('img/tabBack2.png');
     var tab1 = u$.System.Library.Gui.createTab('First Tab', 'img/doc.png');
     var win1 = new u$.Classes.Object();
     win1.obj = document.createElement('div');
     win1.obj.style = "position:absolute;left:0px;right:0px;top:0px;bottom:0px;";
     win1.obj.innerHTML = "This is inside tab 1";
-    win1.obj.contenteditable = true;
+    win1.obj.contentEditable = true;
     tab1.addContent(win1);
     tbg.addTab(tab1);
     
@@ -199,7 +202,7 @@ function init_editorWin(){
     win2.obj = document.createElement('div');
     win2.obj.style = "position:absolute;left:0px;right:0px;top:0px;bottom:0px;";
     win2.obj.innerHTML = "This is inside tab 2";
-    win2.obj.contenteditable = true;
+    win2.obj.contentEditable = true;
     tab2.addContent(win2);
     tbg.addTab(tab2);
     
@@ -208,7 +211,7 @@ function init_editorWin(){
     win3.obj = document.createElement('div');
     win3.obj.style = "position:absolute;left:0px;right:0px;top:0px;bottom:0px;";
     win3.obj.innerHTML = "This is inside tab 3";
-    win3.obj.contenteditable = true;
+    win3.obj.contentEditable = true;
     tab3.addContent(win3);
     tbg.addTab(tab3);
     
@@ -217,7 +220,7 @@ function init_editorWin(){
     win4.obj = document.createElement('div');
     win4.obj.style = "position:absolute;left:0px;right:0px;top:0px;bottom:0px;";
     win4.obj.innerHTML = "This is inside tab 4";
-    win4.obj.contenteditable = true;
+    win4.obj.contentEditable = true;
     tab4.addContent(win4);
     tbg.addTab(tab4);
     
@@ -226,7 +229,7 @@ function init_editorWin(){
     win5.obj = document.createElement('div');
     win5.obj.style = "position:absolute;left:0px;right:0px;top:0px;bottom:0px;";
     win5.obj.innerHTML = "This is inside tab 5";
-    win5.obj.contenteditable = true;
+    win5.obj.contentEditable = true;
     tab5.addContent(win5);
     tbg.addTab(tab5);
     
@@ -234,14 +237,36 @@ function init_editorWin(){
     var win6 = new u$.Classes.Object();
     win6.obj = document.createElement('div');
     win6.obj.style = "position:absolute;left:0px;right:0px;top:0px;bottom:0px;";
-    win6.obj.innerHTML = "This is inside tab 6";
-    win6.obj.contenteditable = true;
+    //win6.obj.innerHTML = "This is inside tab 6";
+    //win6.obj.contentEditable = true;
     tab6.addContent(win6);
     tbg.addTab(tab6);
+    
+    var editor = u$.System.Library.Gui.Objects.codeEditor(win6);
 }
 
 function init_obexProjects(){
-    var root = u$.System.Library.Gui.createItemTree(obexWin);
+    var tbg = u$.System.Library.Gui.createTabGroup(obexWin);
+    tbg.setTabBackground('img/tabBack3.png');
+    tbg.minTabWidth = 50;
+    tbg.maxTabWidth = 80;
+    var tab1 = u$.System.Library.Gui.createTab('First Tab', 'img/doc.png');
+    var win1 = new u$.Classes.Object();
+    win1.obj = document.createElement('div');
+    win1.obj.style = "position:absolute;left:0px;right:0px;top:0px;bottom:0px;";
+    tab1.addContent(win1);
+    tbg.addTab(tab1);
+    
+    var tab2 = u$.System.Library.Gui.createTab('Second Tab', 'img/doc.png');
+    var win2 = new u$.Classes.Object();
+    win2.obj = document.createElement('div');
+    win2.obj.style = "position:absolute;left:0px;right:0px;top:0px;bottom:0px;";
+    tab2.addContent(win2);
+    tbg.addTab(tab2);
+    
+    //tbg.resizeTabHead();
+    
+    var root = u$.System.Library.Gui.createItemTree(win1);
     var prj = root.addNode('d', 'microJS', true);
     var src = prj.addNode('d','Sources', true);
     var css = src.addNode('d', 'css', false);
@@ -271,6 +296,25 @@ function init_obexProjects(){
     
     src.addNode('f', 'index.html', true);
     
+    var tbg = u$.System.Library.Gui.createTabGroup(outputWin);
+    tbg.setTabBackground('img/tabBack.png');
+    tbg.minTabWidth = 80;
+    tbg.maxTabWidth = 80;
+    var tab1 = u$.System.Library.Gui.createTab('First Tab', 'img/doc.png');
+    var win1 = new u$.Classes.Object();
+    win1.obj = document.createElement('div');
+    win1.obj.style = "position:absolute;left:0px;right:0px;top:0px;bottom:0px;";
+    win1.obj.innerHTML = "This is inside tab 1";
+    tab1.addContent(win1);
+    tbg.addTab(tab1);
+    
+    var tab2 = u$.System.Library.Gui.createTab('Second Tab', 'img/doc.png');
+    var win2 = new u$.Classes.Object();
+    win2.obj = document.createElement('div');
+    win2.obj.style = "position:absolute;left:0px;right:0px;top:0px;bottom:0px;";
+    win2.obj.innerHTML = "This is inside tab 2";
+    tab2.addContent(win2);
+    tbg.addTab(tab2);
 }
 
 /*
