@@ -4,9 +4,10 @@ To change this template file, choose Tools | Templates
 and open the template in the editor.
 */
 /* 
-    Created on : 7 Jan, 2017, 1:44:59 PM
-    Author     : geek
-*/
+ *  Created on : 7 Jan, 2017, 1:44:59 PM
+ *  @geekubuntu
+ *  Author     : Rahul Bhartari
+ */
 
 .ideFont{
     font-family: Verdana, Arial, Helvetica, sans-serif;
@@ -72,6 +73,8 @@ and open the template in the editor.
 .fdnode{
     position: relative;
     font-size: 11px;
+    cursor: default;
+    transition: opacity 2s ease-out;
 }
 .fxnode{
     height: 15px;
