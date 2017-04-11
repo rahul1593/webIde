@@ -6,10 +6,10 @@
  * Author: Rahul Bhartari
  */
 
-var objExp_style = 'position:absolute;left:0%;width:18.1%;top:0%;height:99.8%;border-top:1px solid black;border-bottom:1px solid black;border-left:1px solid black';
-var queryWin_style = 'position:absolute;left:18.3%;width:63.3%;top:0%;height:55.1%';
-var optWin_style = 'position:absolute;left:18.3%;width:63.3%;top:55.7%;height:44.2%;border-bottom:1px solid black';
-var infoWin_style = 'position:absolute;left:81.8%;width:18.1%;top:0%;height:99.8%;border-top:1px solid black;border-bottom:1px solid black;border-right:1px solid black';
+var objExp_style = 'position:absolute;left:0%;width:18.1%;top:0%;height:99.8%;border-top:1px solid black;border-bottom:1px solid black;border-left:1px solid black;overflow:auto';
+var queryWin_style = 'position:absolute;left:18.3%;width:63.3%;top:0%;height:55.1%;overflow:auto';
+var optWin_style = 'position:absolute;left:18.3%;width:63.3%;top:55.7%;height:44.2%;border-bottom:1px solid black;overflow:auto';
+var infoWin_style = 'position:absolute;left:81.8%;width:18.1%;top:0%;height:99.8%;border-top:1px solid black;border-bottom:1px solid black;border-right:1px solid black;overflow:auto';
 //some parentWindow objects
 menuBarWin = null;
 toolBarWin = null;
@@ -317,6 +317,41 @@ function init_obexProjects(){
     tbg.addTab(tab2);
 }
 
+function init_properties(){
+    var tbg = u$.System.Library.Gui.createTabGroup(infoWin);
+    tbg.setTabBackground('img/tabBack.png');
+    tbg.minTabWidth = 50;
+    tbg.maxTabWidth = 80;
+    var tab1 = u$.System.Library.Gui.createTab('Property Tab', 'img/doc.png');
+    var win1 = new u$.Classes.Object();
+    win1.obj = document.createElement('div');
+    win1.obj.style = "position:absolute;left:0px;right:0px;top:0px;bottom:0px;overflow:auto";
+    var pbx1 = new u$.System.Library.Gui.Objects.propertyBox(win1);//add propbox to win1
+    tab1.addContent(win1);      //make contentWindow the default where child is appended to parent(not obj)
+    tbg.addTab(tab1);
+    
+    var gn_p = pbx1.addPropNode('General');
+    var gp1 = gn_p.addProperty('Name');
+    gp1.addInput(false, false);
+    var gp2 = gn_p.addProperty('Label');
+    gp2.addInput(false, false);
+    var gp3 = gn_p.addProperty('Type');
+    gp3.addDropdown([['input'],['output'],['trans']]);
+    var gns_p = gn_p.addPropNode('Specific');
+    var gsp2 = gns_p.addProperty('Data Item');
+    gsp2.addInput(false, false);
+    
+    
+    var ds_p = pbx1.addPropNode('Display');
+    var dp1 = ds_p.addProperty('Height');
+    dp1.addInput(false, false);
+    var dp2 = ds_p.addProperty('Width');
+    dp2.addInput(false, false);
+    var dp3 = ds_p.addProperty('Background Color');
+    dp3.addInput(false, false);
+    dp3.addInputButton('...', function(){alert('Yo Yo ^_^');});
+}
+
 /*
  * add a menu bar
  *      __ add items to menu bar
@@ -337,3 +372,4 @@ init_menuBar();
 init_toolbar();
 init_editorWin();
 init_obexProjects();
+init_properties();
