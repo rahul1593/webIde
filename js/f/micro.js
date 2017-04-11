@@ -376,9 +376,8 @@ u$ = {
                     general:'$menuBarBackground: #444444;\n',
                     window: '.uc_window{border-radius:2px}',
                     menuBarItem: '.uc_menuBarItem{font-size:10px;padding-left:2px;padding-right:2px;outline:none;cursor:context-menu}\n\
-                                    .uc_menuBarItem:hover,.uc_menuBarItem:active\n\
-                                    {border:1px solid #cccccc}',
-                    menuItemOption: '.uc_menuItemOption{background-color:#eeeeee;font-size:10px;z-index:100}\n\
+                                    .uc_menuBarItem:hover,.uc_menuBarItem:active{border:1px solid #cccccc}',
+                    menuItemOption: '.uc_menuItemOption{background-color:#eeeeee;font-size:10px;z-index:101}\n\
                                     .uc_menuItemOption:hover,.uc_menuItemOption:active{background-color:white;cursor:context-menu}',
                     icon: '.uc_icon{display:inline-block;border:1px solid #cccccc}\n.uc_icon:hover,.uc_icon:active{border:1px solid white}',
                     icon2: '.uc_icon2{display:inline-block;border:1px solid white}\n.uc_icon2:hover,.uc_icon2:active{border:1px solid black}',
@@ -389,15 +388,24 @@ u$ = {
                     toolsGroupDragger: '.uc_toolsDragger{height:24px;width:5px;background-color:#eeeeee;border:none;margin:2px 0px 2px 0px;float:left;}\n\
                                 .uc_toolsDragger:hover{cursor:move}',// t r b l
                     button: '.uc_button{text-align:center;margin:0;padding:4px 8px 4px 8px;border-radius:4px;border:1px solid #eeeeee;background-color:#dddddd;box-shadow: 0px 0px 5px 0px #eeeeee;}\n\
-                             .uc_button:hover{cursor:pointer;border:1px solid #9999ff;background-color:#e1e1e1;}',
+                             .uc_button:hover{cursor:pointer;border:1px solid #9999ff;background-color:#e1e1e1;}\n\
+                             .uc_microButton{text-align:center;margin:0;padding:1px 2px 1px 2px;border-radius:1px;border:1px solid #eeeeee;background-color:#dddddd;}\n\
+                             .uc_microButton:hover{cursor:pointer;border:1px solid #9999ff;background-color:#e1e1e1;}',
                     close: '.uc_close{border:1px solid transparent} .uc_close:hover{border:1px solid black}',
                     editor: '.uc_editor{position:absolute;display:block;width:100%;height:100%;border:none}\n\
                             .uc_numbers{display:inline-block;position:relative;top:0%;height:100%;width:auto;float:left;min-width:20px;border:1px solid gray;}\n\
                             .uc_gap{display:inline-block;position:relative;top:0%;height:100%;width:10px;float:left;min-width:10px;border:1px solid blue;}\n\
                             .uc_editor_area{display:inline-block;position:relative;top:0%;height:99.5%;float:left;}  /*manage width:364px;*/\n\
-                            .uc_editor_backend{position:absolute;top:0%;height:100%;left:0%;width:100%;max-width:100%;border:2px solid red;z-index:0;}\n\
-                            .uc_editor_frontend{white-space:pre-wrap;position:absolute;top:0%;height:100%;left:0%;width:100%;max-width:100%;overflow-y:auto;border:1px solid aqua;z-index:10;}\n\
-                            .uc_editor_line{display:block;left:0%;width:100%;} .uc_editor_line:active{background-color:#dddddd;}'
+                            .uc_editor_backend{position:absolute;top:0%;height:100%;left:0%;width:100%;max-width:100%;border:2px solid red;z-index:-1;}\n\
+                            .uc_editor_frontend{white-space:pre-wrap;position:absolute;top:0%;height:100%;left:0%;width:100%;max-width:100%;overflow-y:auto;border:1px solid aqua;}\n\
+                            .uc_editor_line{display:block;left:0%;width:100%;} .uc_editor_line:active{background-color:#dddddd;}',
+                    propertyBox:'.uc_propBox{position:relative;display:block;width:100%}\n\
+                            .uc_propElement{position:relative;display:inline-block;float:left;vertical-align:middle;margin-left:3px;}\n\
+                            .uc_propBlock{position:relative;display:block;}\n\
+                            .uc_propNode{position:relative;display:block;padding-bottom:2px}\n\
+                            .uc_ecIcon{transform:translateY(2px);text-align:center;vertical-align:middle;font-size:10px;font-weight:bold;height:8px;width:8px;border:1px solid #cccccc}\n\
+                            .uc_ecIcon:hover,.uc_ecIcon:active{cursor:pointer;border:1px solid black;}\n\
+                            .uc_absolute{position:absolute;}'
                 },
                 __data:{
                     itemClicked: false,
@@ -577,15 +585,22 @@ u$ = {
                         };
                     },
                     //different types of UI elements
-                    inputBox: function(){
+                    inputBox: function(parentWin){
                         this.id = null;
-                        this.obj = null;
-                        this.parentObj = null;
+                        this.obj = document.createElement('input');
+                        this.parentObj = parentWin.obj;
                         this.height = 15;   //in pixels
                         this.width = 30;
                         this.type = 'text'; //can be text, number, date
                         this.placeholderText = 'Enter Here';
                         this.validate = null;   //validator function
+                        
+                        this.obj.style.height = this.height+'px';
+                        this.obj.style.width = this.width+'px';
+                        this.obj.type = this.type;
+                        this.obj.placeholder = this.placeholderText;
+                        
+                        return this;
                     },
                     button: function(){
                         this.id = null;
@@ -1355,8 +1370,208 @@ u$ = {
                             //functionality to be defined
                         }
                     },
-                    propertyBox: function(){
+                    property: function(parentNode, parentPropBox, label){
+                        /*
+                         * property has either input or dropdown action
+                         * for input action, one additional button action can be added
+                         */
+                        this.id = null;
+                        this.obj = document.createElement('div');
+                        this.labelObj = document.createElement('div');
+                        this.propObj = document.createElement('div');
+                        this.parentPropertyBox = parentPropBox;
+                        this.parentNode = parentNode;
+                        this.label = label;
+                        this.type = null;     //can be 'input' or 'select'
+                        this.labelWidth = 90;
+                        this.propWidth = 74;
+                        this.actionObj = null;
+                        this.type = null;       //input or select
+                        this.buttonObj = null;
+                        this.buttonAction = null;
+                        this.propertySaveCallback = null;
                         
+                        this.labelObj.innerHTML = label;
+                        this.labelObj.className = 'uc_propElement sfTextStyle';
+                        this.propObj.className = 'uc_propElement';
+                        this.labelObj.style.width = this.labelWidth+'px';
+                        this.propObj.style.width = this.propWidth+'px';
+                        this.propObj.style.minHeight = parentPropBox.rowHeight+'px';
+                        this.obj.className = 'uc_propBlock';
+                        this.obj.style.height = parentPropBox.rowHeight+'px';
+                        this.obj.style.minWidth = parentPropBox.propWidth+20+'px';
+                        this.obj.appendChild(this.labelObj);
+                        this.obj.appendChild(this.propObj);
+                        this.parentNode.obj.appendChild(this.obj);
+                        
+                        this.addDropdown = function(options_value_list){
+                            //list of possible options and their values, format: [[op1, val1], ..]
+                            var obj = document.createElement('select');
+                            obj.className = 'uc_absolute sfTextStyle';
+                            obj.style.width = (this.propWidth+4)+'px';
+                            obj.style.height = parentPropBox.rowHeight+'px';
+                            //set properties
+                            this.actionObj = obj;
+                            this.type = 'select';
+                            this.propObj.appendChild(obj);
+                            if(options_value_list !== null){
+                                var op = null;
+                                for(var i=0;i<options_value_list.length;i++){
+                                    op = document.createElement('option');
+                                    op.innerHTML = options_value_list[i][0];
+                                    if(options_value_list[i].length > 1){
+                                        op.value = options_value_list[i][1];
+                                    }
+                                    obj.appendChild(op);
+                                }
+                            }
+                            return obj;
+                        };
+                        this.addInput = function(isNumeric, isHidden){  //true or false
+                            var obj = document.createElement('input');
+                            obj.type = 'text';
+                            if(isNumeric){
+                                obj.type = 'numeric';
+                            }
+                            if(isHidden){
+                                obj.type = 'password';
+                            }
+                            obj.className = 'uc_absolute sfTextStyle ';
+                            obj.style.width = this.propWidth+'px';
+                            obj.style.height = (parentPropBox.rowHeight-6)+'px';
+                            this.actionObj = obj;
+                            this.type = 'input';
+                            this.propObj.appendChild(obj);
+                            return obj;
+                        };
+                        this.addInputButton = function(text, clickHandle){
+                            if(this.type === 'select'){
+                                return;
+                            }
+                            this.actionObj.style.width = (this.propWidth-17)+'px';
+                            var btn = document.createElement('div');
+                            btn.innerHTML = text;
+                            btn.className = 'uc_microButton uc_absolute sfTextStyle';
+                            btn.style.margin = 0;
+                            btn.style.left = (this.propWidth-12)+'px';
+                            btn.style.width = '11px';
+                            btn.style.height = (parentPropBox.rowHeight-3)+'px';
+                            this.buttonObj = btn;
+                            this.buttonAction = clickHandle;
+                            btn.onclick = clickHandle;
+                            btn.addEventListener('mousedown', function(e){ e.preventDefault(); }, false);
+                            this.propObj.appendChild(btn);
+                            return btn;
+                        };
+                        this.removeAction = function(isInputButton){//true/false
+                            //remove any existing action
+                            switch(isInputButton){
+                                case false: this.propObj.removeChild(this.actionObj);
+                                    this.actionObj = null;
+                                    //continue to remove button as well
+                                case true : if(this.buttonObj !== null){
+                                        this.propObj.removeChild(this.buttonObj);
+                                        this.buttonObj = null;
+                                        this.buttonAction = null;
+                                    }
+                            }
+                        };
+                        return this;
+                    },
+                    propertyNode: function(parentNode, parentPropBox, label){
+                        this.id = null;
+                        this.obj = document.createElement('div');
+                        this.parentPropertyBox = parentPropBox;
+                        this.parentNode = parentNode;
+                        this.label = label;
+                        this.labelRowObj = document.createElement('div');
+                        this.ecIcon = document.createElement('img');
+                        this.labelObj = document.createElement('div');
+                        this.propNodesList = [];//contain property and propertyNode objects
+                        this.propsVisible = true;
+                        
+                        this.labelRowObj.className = 'uc_propBox';
+                        this.labelRowObj.style.height = parentPropBox.rowHeight+'px';
+                        this.labelRowObj.style.width = parentPropBox.propWidth+'px';
+                        this.ecIcon.src = 'img/minus.png';
+                        this.ecIcon.className = 'uc_ecIcon uc_propElement';
+                        this.ecIcon.data = this;
+                        
+                        function excolProps(btn){
+                            var props = btn.data.propNodesList;
+                            var display = 'block';
+                            if(btn.data.propsVisible){
+                                display = 'none';
+                                btn.data.propsVisible = false;
+                                btn.src = 'img/plus.png';
+                            }else{
+                                btn.data.propsVisible = true;
+                                btn.src = 'img/minus.png';
+                            }
+                            for(var i=0;i<props.length;i++){
+                                props[i].obj.style.display = display;
+                            }
+                        }
+                        
+                        this.ecIcon.onclick = function(e){
+                            var evt = event || window.event || e;
+                            excolProps(evt.target);
+                        };
+                        //to prevent selection on text div button
+                        this.ecIcon.addEventListener('mousedown', function(e){ e.preventDefault(); }, false);
+                        
+                        this.labelObj.innerHTML = label;
+                        this.labelObj.className = 'uc_propElement sfTextStyle';
+                        this.labelObj.style.fontWeight = 'bold';
+                        
+                        this.labelRowObj.appendChild(this.ecIcon);
+                        this.labelRowObj.appendChild(this.labelObj);
+                        this.obj.appendChild(this.labelRowObj);
+                        
+                        this.obj.className = 'uc_propNode';
+                        this.obj.style.minHeight = parentPropBox.rowHeight+'px';
+                        this.obj.style.minWidth = parentPropBox.propWidth+'px';
+                        this.parentNode.obj.appendChild(this.obj);
+                        
+                        this.addPropNode = function(label){
+                            var propNode = new u$.System.Library.Gui.Objects.propertyNode(this, this.parentPropertyBox, label);
+                            this.propNodesList[this.propNodesList.length] = propNode;
+                            propNode.obj.style.paddingLeft = '10px';
+                            return propNode;
+                        };
+                        this.addProperty = function(label){
+                            var prop = new u$.System.Library.Gui.Objects.property(this, this.parentPropertyBox, label);
+                            this.propNodesList[this.propNodesList.length] = prop;
+                            prop.obj.style.paddingLeft = '10px';
+                            return prop;
+                        };
+                        return this;
+                    },
+                    propertyBox: function(parentWin){
+                        //general properties
+                        this.id = null;
+                        this.obj = document.createElement('div');
+                        this.parentObj = parentWin.obj;
+                        this.labelWidth = 50;   //label width in pixels
+                        this.rowHeight = 15;    //property row height in pixels
+                        this.propWidth = 170;   //width of property Node in pixels
+                        this.fontSize = 10;     //font size for text in pixels
+                        this.propNodesList = [];    //contain property and propertyNode Objects
+                        
+                        this.obj.className = 'uc_propbox';
+                        this.parentObj.appendChild(this.obj);
+                        
+                        this.addPropNode = function(label){
+                            var propNode = new u$.System.Library.Gui.Objects.propertyNode(this, this, label);
+                            this.propNodesList[this.propNodesList.length] = propNode;
+                            return propNode;
+                        };
+                        this.addProperty = function(label){
+                            var prop = new u$.System.Library.Gui.Objects.property(this, this, label);
+                            this.propNodesList[this.propNodesList.length] = prop;
+                            return prop;
+                        };
+                        return this;
                     },
                     editorToolBar: function(){
                         //this is attached to every editor window
@@ -1438,7 +1653,7 @@ u$ = {
                         }
                         function onKeyPress(e){
                             var evt = e || window.event || event;
-                            var c = e.which || e.keyCode;
+                            var c = evt.which || evt.keyCode;
                             if(c === 13){
                                 evt.preventDefault();
                                 editor.addLine();
@@ -1600,7 +1815,7 @@ u$ = {
                     var left = boundMenuItem.obj.getBoundingClientRect().left;
                     var bottom = parseInt(cst.height.split('px')[0], 10)+boundMenuItem.obj.getBoundingClientRect().top;
                     cmtbl.style='position:absolute;top:'+bottom.toString()+'px;height:auto;left:'+left.toString()+'px;width:'+
-                                contextMenu.width.toString()+"px;border:1px solid #999999;margin:0;background-color:#eeeeee;display:none";
+                                contextMenu.width.toString()+"px;border:1px solid #999999;margin:0;background-color:#eeeeee;display:none;z-index:100";
                     cmtbl.style.borderCollapse = 'collapse';
                     u$.App.RootWindow.obj.appendChild(cmtbl);
                     contextMenu.obj = cmtbl;
@@ -1930,8 +2145,8 @@ u$ = {
                     parentToolBar.addToolsGroup(toolsGroup);
                     return toolsGroup;
                 },
-                createPropertyBox: function(parentWin, propTreeObject){
-                    
+                createPropertyBox: function(parentWin){
+                    return new u$.System.Library.Gui.Objects.propertyBox(parentWin);
                 }
             },
             Utility:{
