@@ -25,22 +25,22 @@ __Level 2__
 __Level 3__
  * Menu Bar
    - Menu Item
-     - Item Option(type: button, menu item)
+     - Item Option (type: button, menu item)
  * Toolbar
    - Toolbar Item
  * Footer
- * Session Menu Bar(Special case of Menu Bar)
+ * Session Menu Bar (Special case of Menu Bar)
 
 __Level 4__
 * Canvas Area
 * SVG Area
 
-__Level 5__(Dual Type: HTML or SVG objects)
+__Level 5__ (Dual Type: HTML or SVG objects)
 * Input Field
 * Button
 * Radio-Multiselect Button
 * Drop down
 * Directory Tree
-* Context Menu(Special case of Menu Item)
+* Context Menu (Special case of Menu Item)
 * Progress Bar
 * Search Bar
