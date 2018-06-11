@@ -13,7 +13,7 @@
 Any object in Higher level can be placed in any object in Lower Level.
 For example, any object from Level 4 can be placed within any object in level 2.
 
-Any Object can have constituent objects (starting with '>') which can only be used within that object.
+Any Object can have constituent objects which can only be used within that object.
 
 __Level 1__
 * Window
@@ -24,10 +24,10 @@ __Level 2__
 
 __Level 3__
  * Menu Bar
-    > Menu Item
-      > Item Option(type: button, menu item)
+    - Menu Item
+     - Item Option(type: button, menu item)
   * Toolbar
-    > Toolbar Item
+    - Toolbar Item
   * Footer
   * Session Menu Bar(Special case of Menu Bar)
 
