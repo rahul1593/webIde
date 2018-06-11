@@ -1,0 +1,9 @@
+### Feautures
+1. Services using timers and webworkers
+2. Tasks using webworkers
+3. Custom JSON Themes support
+4. Plugins support for custome UI components
+5. Load UI and callbacks from JSON definition
+6. Supports HTML Canvas based UI objects 
+7. Supports AJAX and websockets for server communication
+8. Supports Logging for debugging
