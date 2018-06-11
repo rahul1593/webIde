@@ -15,32 +15,32 @@ For example, any object from Level 4 can be placed within any object in level 2.
 
 Any Object can have constituent objects (starting with '>') which can only be used within that object.
 
-__ Level 1 __
--- Window
+__Level 1__
+* Window
 
-__ Level 2 __
--- Tab Group
--- Context Window
+__Level 2__
+* Tab Group
+* Context Window
 
-__ Level 3 __
-  -- Menu Bar
+__Level 3__
+ * Menu Bar
     > Menu Item
       > Item Option(type: button, menu item)
-  -- Toolbar
+  * Toolbar
     > Toolbar Item
-  -- Footer
-  -- Session Menu Bar(Special case of Menu Bar)
+  * Footer
+  * Session Menu Bar(Special case of Menu Bar)
 
-__ Level 4 __
--- Canvas Area
--- SVG Area
+__Level 4__
+* Canvas Area
+* SVG Area
 
-__ Level 5 __(Dual Type: HTML or SVG objects)
-    -- Input Field
-    -- Button
-    -- Radio-Multiselect Button
-    -- Drop down
-    -- Directory Tree
-    -- Context Menu(Special case of Menu Item)
-    -- Progress Bar
-    -- Search Bar
+__Level 5__(Dual Type: HTML or SVG objects)
+    * Input Field
+    * Button
+    * Radio-Multiselect Button
+    * Drop down
+    * Directory Tree
+    * Context Menu(Special case of Menu Item)
+    * Progress Bar
+    * Search Bar
