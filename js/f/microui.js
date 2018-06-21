@@ -3,34 +3,154 @@
  */
  
 function microUI(){
-	this.name = 'microUI';
-	this.description = "This app contains some code which even the coder doesn't understand ;).";
-	this.dom_container_obj = null;
-	
-	var _theme = {//will define fully at last
+	var _app = {
+		name: 'microUI',
+		description: "This app contains some code which even the coder doesn't understand ;).",
+		dom_container_obj: null
+		services: [],
+		rootWindow: null,
+		windows: [],
+		objects: []
+	};
+	var _themes = {//will define fully at last
 		backgroundColor: 'black',
 		windowCss:''
 	};
 	
-	var _ui_objects = {
-		window:{
-			dom_obj: null,
-			parent_obj: null,
-			css: {position:'absolute',left:'0%',top:'0%',height:'100%',width:'100%'},
-			
-		},
-		
+	const defaultCssClasses = {
+		uc_window:{name:'uc_window', definition:'.uc_window{border-radius:2px}'}
 	};
 	
-	this.getProperty = function(propName){
-		
-    };
-	this.setProperty = function(propName, value){
-		
+	// attributes stored for any UI object
+	var _ui_objects = {
+		// level 1
+		Window:{
+			dom_obj: null,
+			parent_obj: null,
+			childObjects: null		// shall be initialized to new Map() object
+		},
+		//level 2
+		TabGroup:{
+			parent_obj: null
+		},
+		Tab:{
+			parent_obj: null
+		},
+		ContextWindow:{
+			parent_obj: null
+		},
+		//level 3
+		MenuBar:{
+			MenuItem:{
+				Option:{
+					parent_obj: null
+				},
+				parent_obj: null
+			},
+			parent_obj: null
+		},
+		ToolBar:{
+			ToolBarItem:{
+				parent_obj: null
+			},
+			parent_obj: null
+		},
+		Footer:{
+			parent_obj: null
+		},
+		SessionMenuBar:{
+			parent_obj: null
+		}
+		//level 4
+		CanvasArea:{
+			parent_obj: null
+		},
+		SVGArea:{
+			parent_obj: null
+		},
+		//level 5
+		InputField:{
+			parent_obj: null
+		},
+		Button:{
+			parent_obj: null
+		},
+		CheckButton:{
+			parent_obj: null
+		},
+		DropDown:{
+			parent_obj: null
+		},
+		DirectoryTree:{
+			parent_obj: null
+		},
+		ContextMenu:{
+			parent_obj: null
+		},
+		ProgressBar:{
+			parent_obj: null
+		},
+		SearchBar:{
+			parent_obj: null
+		},
+		DragBar:{
+			parent_obj: null
+		}
 	};
+	
+	this.app = Object.freeze({
+		//attribute getters
+		getName: function(){ return _app.name; },
+		getDescription: function() { return _app.description; },
+		getContainerObj: function() { return _app.dom_container_obj; },
+		//attribute setters
+		setName: function(appName){ _app.name = appName; },
+		setDescription: function(description) { _app.description = description; },
+		//this will transfer the entire app to the new object passed (must be a div element or document object)
+		setContainerObj: function(newContainerDiv) {
+			newContainerDiv.innerHTML = _app.dom_container_obj.innerHTML;
+			_app.dom_container_obj.innerHTML = '';
+			_app.dom_container_obj = newContainerDiv;
+		}
+	});
+	
+	this.uiObjects = Object.freeze({
+		
+	});
+	
+	this.services = Object.freeze({
+		add: function(){
+		
+		},
+		remove: function(){
+			
+		},
+		start: function(){
+		
+		},
+		restart: function(){
+			
+		},
+		pause: function(){
+			
+		},
+		stop: function(){
+			
+		},
+		ping: function(){
+			
+		},
+		sendMessage: function(){
+			// return true if service is ready to take any message, else false
+		},
+		getMessage: function(){
+			// if addressed service has registered for giving respose on recieving a message,
+			// then this function will wait(block) for the response, else return false immediately
+		}
+	});
+	return Object.freeze(this);
 }
 
-//const microUI = Object.freeze(new _microUI_Framework_Core());
 
 /*
  * Following function is called when this script is used as a services manager
@@ -40,29 +160,6 @@ function microUI(){
 function _services(callback, arguments){
 	
 }
-
-u$ = microUI;
-
-
-
-
-
-
-
-
-const _app = Object.freeze(_app);
-/*
-	Example for variables not available for modification to outsiders
-*/
-var getCode = (function() {
-  var apiCode = '0]Eal(eh&2';    // A code we do not want outsiders to be able to modify...
-  
-  return function() {
-    return apiCode;
-  };
-}());
-
-getCode();    // Returns the apiCode
 
 /*
 	Spread operator example
